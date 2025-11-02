@@ -1,0 +1,249 @@
+<div class="rounded-2xl lg:rounded-3xl p-5 md:p-6 lg:p-8 h-full" hlmCard>
+@if(edit){
+<form [formGroup]="planForm">
+    <div class="flex justify-end">
+      <button hlmBtn variant="ghost" class="px-2!" (click)="edit = false">
+        <ng-icon name="lucideX" />
+      </button>
+    </div>
+    <div class="flex flex-col gap-3">
+      <div class="flex flex-col gap-1">
+        <label for="name" hlmLabel>Name</label>
+        <input hlmInput id="name" formControlName="name" />
+      </div>
+
+      <div class="flex gap-2 items-center">
+        <label hlmLabel>Popular Plan</label> <hlm-switch formControlName="is_popular"></hlm-switch>
+      </div>
+    </div>
+    <div>
+      <div
+        class="flex flex-col mt-8 md:flex-row items-baseline justify-between gap-2"
+      >
+        <div class="flex gap-1 flex-col items-baseline" formGroupName="price">
+          <label class="mb-2" hlmLabel>Price</label>
+          <div class="space-x-2">
+            <label for="price_monthly" hlmLabel class="text-muted-foreground">Monthly</label>
+            <div class="flex gap-1 items-baseline">
+              <input hlmInput id="price_monthly" formControlName="monthly" />
+              <span class="uppercase text-sm">/Month</span>
+            </div>
+          </div>
+          <div class="space-x-2">
+            <label for="price_yearly" hlmLabel class="text-muted-foreground">Yearly</label>
+            <div class="flex gap-1 items-baseline">
+              <input hlmInput id="price_yearly" formControlName="yearly" />
+              <span class="uppercase text-sm">/Yearly</span>
+            </div>
+          </div>
+          <div class="space-x-2">
+            <label for="price_lifetime" hlmLabel class="text-muted-foreground">Lifetime</label>
+            <div class="flex gap-1 items-baseline">
+              <input hlmInput id="price_lifetime" formControlName="lifetime" />
+              <span class="uppercase text-sm">/lifetime</span>
+            </div>
+          </div>
+        </div>
+        <div class="text-sub-heading-caps-2"></div>
+      </div>
+      <div class="flex flex-col gap-1 mt-4">
+        <label for="description" hlmLabel >Description</label>
+        <input hlmInput id="description" formControlName="description" />
+      </div>
+    </div>
+    <div class="flex flex-col gap-1 mt-4">
+      <label for="planId" hlmLabel>Plan Id</label>
+      <input hlmInput id="planId" formControlName="plan_id" />
+    </div>
+    <div class="flex flex-col gap-1 mt-4">
+      <label for="characters" hlmLabel>Total Number of tokens</label>
+      <input
+        hlmInput
+        id="characters"
+        type="number"
+        formControlName="character_limit"
+      />
+    </div>
+    <div class="flex flex-col gap-1 mt-4">
+      <label for="default_character_limit" hlmLabel
+        >Number of characters per one Conversion</label
+      >
+      <input
+        hlmInput
+        id="default_character_limit"
+        type="number"
+        formControlName="default_character_limit"
+      />
+    </div>
+    <div class="flex flex-col gap-1 mt-4">
+      <label for="voice_limit" hlmLabel>Speech to Text Limit</label>
+      <input hlmInput id="voice_limit" formControlName="voice_limit" />
+    </div>
+    <div class="flex flex-col mt-8 lg:mt-6 gap-12">
+      <div>
+        <div class="flex justify-between">
+          <label hlmLabel>Features</label>
+          <button htmBtn variant="ghost" (click)="addFeature()">
+            <ng-icon name="lucidePlus" />
+          </button>
+        </div>
+        <div
+          class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-x-12 lg:grid-cols-1"
+          formArrayName="features"
+        >
+          @for(data of features.controls; track data; let i = $index){
+          <div class="flex items-center gap-3">
+            <input
+              hlmInput
+              [formControlName]="i"
+              class="w-100"
+            />
+            <button
+              htmBtn
+              variant="ghost"
+              (click)="deleteFeature(i)"
+              [disabled]="features.controls.length === 1"
+            >
+              <ng-icon name="lucideTrash2" />
+            </button>
+          </div>
+          }
+        </div>
+      </div>
+      <div>
+        <div class="flex justify-between">
+          <label hlmLabel>Limitations</label>
+          <button
+            htmBtn
+            variant="ghost"
+            (click)="addLimitation()"
+            [disabled]="features.controls.length === 3"
+          >
+            <ng-icon name="lucidePlus" />
+          </button>
+        </div>
+        <div
+          class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-x-12 lg:grid-cols-1"
+          formArrayName="limitations"
+        >
+          @for(data of limitations.controls; track data; let i = $index){
+          <div class="flex items-center gap-3">
+            <input
+              hlmInput
+              [formControlName]="i"
+              class="w-100"
+            />
+            <button
+              htmBtn
+              variant="ghost"
+              (click)="deleteLimitation(i)"
+              [disabled]="limitations.controls.length === 1"
+            >
+              <ng-icon name="lucideTrash2" />
+            </button>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-2 mt-4">
+      <button hlmBtn (click)="savePlan()" [disabled]="!planForm.valid">
+        Save
+      </button>
+      <button hlmBtn variant="secondary" (click)="edit = false">Cancel</button>
+    </div>
+</form>
+} @else{
+
+  <div class="flex justify-end">
+    <button hlmBtn variant="ghost" class="px-2!" (click)="edit = true">
+      <ng-icon name="remixPencilFill" />
+    </button>
+  </div>
+  <div class="flex justify-between items-center gap-2">
+    <div class="uppercase text-muted-foreground">{{ cardData()?.name }}</div>
+    @if(cardData()?.is_popular){
+    <div
+      class="bg-indigo-600 text-xs px-3 py-1 uppercase rounded-lg text-white"
+    >
+      MOST POPULAR
+    </div>
+    }
+  </div>
+  <div>
+    <div
+      class="flex flex-col mt-8 md:flex-row items-baseline justify-between gap-2"
+    >
+      <div class="flex gap-1 flex-col items-baseline text-4xl">
+        <div class="flex gap-1 items-baseline">
+          {{cardData()?.price?.monthly ?? 0}}
+          <span class="uppercase text-sm">/Month</span>
+        </div>
+        <div class="flex gap-1 items-baseline">
+          {{cardData()?.price?.yearly ?? 0}}
+          <span class="uppercase text-sm">/Yearly</span>
+        </div>
+        <div class="flex gap-1 items-baseline">
+          {{cardData()?.price?.lifetime ?? 0}}
+          <span class="uppercase text-sm">/lifetime</span>
+        </div>
+      </div>
+      <div class="text-sub-heading-caps-2"></div>
+    </div>
+    <div class="mt-4 text-muted-foreground prose-p:text-body-3">
+      <p>{{ cardData()?.description }}</p>
+    </div>
+  </div>
+  <div class="mt-4 text-muted-foreground prose-p:text-body-3">
+    <p>Plan Id: {{ cardData()?.plan_id }}</p>
+  </div>
+  <div class="mt-4 text-muted-foreground prose-p:text-body-3">
+    <p>Total Number of tokens: {{ cardData()?.character_limit }}</p>
+  </div>
+  <div class="mt-4 text-muted-foreground prose-p:text-body-3">
+    <p>
+      Number of characters per one Conversion: {{
+      cardData()?.default_character_limit }}
+    </p>
+  </div>
+  <div class="mt-4 text-muted-foreground prose-p:text-body-3">
+    <p>Speech to Text Limit: {{ cardData()?.voice_limit }} mins</p>
+  </div>
+  <div class="flex flex-col lg:flex-col-reverse mt-8 lg:mt-6 gap-12">
+    <ul
+      class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-x-12 lg:grid-cols-1"
+    >
+    @if( cardData()?.features?.length! > 0){
+       @for(data of cardData()?.features; track data){
+      <li class="flex items-center gap-3">
+        <span class="text-[20px]"
+          ><ng-icon name="lucideCheck" class="text-muted-foreground!"></ng-icon
+        ></span>
+        <span>{{data}}</span>
+      </li>
+      }
+    }
+    @if( cardData()?.limitations?.length! > 0){
+     @for(data of cardData()?.limitations; track data){
+      <li class="flex items-center gap-3 text-red-500">
+        <span class="text-[20px]"><ng-icon name="lucideX" /></span>
+        <span>{{data}}</span>
+      </li>
+      }}
+    </ul>
+  </div>
+  <div class="flex">
+    <button
+      hlmBtn
+      [variant]="'destructive'"
+      class="w-full"
+      (click)="deletePlan()"
+    >
+      <div class="flex items-center gap-2 justify-center">
+        <ng-icon name="lucideTrash2" />Delete
+      </div>
+    </button>
+  </div>
+}
+
+</div>

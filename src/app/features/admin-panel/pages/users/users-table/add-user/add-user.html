@@ -1,0 +1,109 @@
+<hlm-dialog>
+  @if(isEdit()){
+  <button hlmBtn variant="ghost" class="!px-2" brnDialogTrigger>
+    <ng-icon name="remixPencilFill" />
+  </button>
+  } @else {
+  <button hlmBtn brnDialogTrigger>
+    <ng-icon name="lucidePlus" class="mr-2" />Add User</button
+  >}
+  <hlm-dialog-content class="sm:max-w-[425px]" *brnDialogContent="let ctx">
+    <hlm-dialog-header>
+      <h3 hlmDialogTitle>{{isEdit() ? 'Edit' : 'Add'}} User</h3>
+      <p hlmDialogDescription>
+        Make changes to users profile here. Click save when you're done.
+      </p>
+    </hlm-dialog-header>
+    <form [formGroup]="userForm">
+      <div class="grid gap-4 py-4">
+        <div class="grid grid-cols-4 items-center gap-4">
+          <label hlmLabel for="name" class="text-right">Full Name</label>
+          <input
+            hlmInput
+            id="name"
+            class="col-span-3"
+            formControlName="username"
+          />
+        </div>
+        <div class="grid grid-cols-4 items-center gap-4">
+          <label hlmLabel for="email" class="text-right">Email</label>
+          <input
+            hlmInput
+            id="email"
+            class="col-span-3"
+            formControlName="email"
+          />
+        </div>
+        @if(!isEdit()){
+        <div class="grid grid-cols-4 items-center gap-4">
+          <label hlmLabel for="password" class="text-right">Password</label>
+          <input
+            hlmInput
+            id="password"
+            class="col-span-3"
+            formControlName="password"
+          />
+        </div>
+        <div class="grid grid-cols-4 items-center gap-4">
+          <label hlmLabel for="repassword" class="text-right"
+            >Re-enter Password</label
+          >
+          <input
+            hlmInput
+            id="repassword"
+            class="col-span-3"
+            formControlName="repeatPassword"
+          />
+        </div>
+        }
+        @if(isAdmin()){
+        <div class="grid grid-cols-4 items-center gap-4">
+          <label hlmLabel for="repassword" class="text-right">Role</label>
+          <brn-select
+            class="inline-block"
+            placeholder="Role"
+            formControlName="role"
+          >
+            <hlm-select-trigger class="w-56">
+              <hlm-select-value />
+            </hlm-select-trigger>
+            <hlm-select-content>
+              <hlm-option value="admin">Admin</hlm-option>
+              <hlm-option value="subadmin">Sub Admin</hlm-option>
+              <hlm-option value="user">User</hlm-option>
+            </hlm-select-content>
+          </brn-select>
+        </div>}
+        <div class="grid grid-cols-4 items-center gap-4">
+          <label hlmLabel for="repassword" class="text-right">Plan</label>
+          <brn-select
+            class="inline-block"
+            placeholder="Plan"
+            formControlName="plan"
+          >
+            <hlm-select-trigger class="w-56">
+              <hlm-select-value />
+            </hlm-select-trigger>
+            <hlm-select-content>
+              <hlm-option value="">None</hlm-option>
+              @for(planDetail of plans(); track planDetail.id){
+              <hlm-option [value]="planDetail.name"
+                >{{planDetail.name}}</hlm-option
+              >}
+            </hlm-select-content>
+          </brn-select>
+        </div>
+      </div>
+    </form>
+    <hlm-dialog-footer>
+      <button
+        hlmBtn
+        type="submit"
+        (click)="isEdit()? updateUser() : addUser()"
+        [disabled]="!userForm.valid"
+      >
+        Save changes
+      </button>
+    </hlm-dialog-footer>
+  </hlm-dialog-content>
+</hlm-dialog>

@@ -1,0 +1,108 @@
+<div class="container mx-auto px-4 sm:px-8">
+  <div class="py-8">
+    <div class="my-2 flex sm:flex-row flex-col">
+      <div
+        class="flex flex-row mb-1 sm:mb-0 justify-between w-full overflow-auto gap-2"
+      >
+        <div class="flex gap-2">
+          <app-add-user [plans]="plans" (refreshUser)="getUsers()" [isAdmin]="currentUser.role === 'admin'" />
+        </div>
+        <div class="flex gap-2">
+          <brn-select class="inline-block" placeholder="Role" [(value)]="role">
+            <hlm-select-trigger class="w-56">
+              <hlm-select-value />
+            </hlm-select-trigger>
+            <hlm-select-content>
+              <hlm-option value="">All</hlm-option>
+              <hlm-option value="admin">Admin</hlm-option>
+              <hlm-option value="subadmin">Sub Admin</hlm-option>
+              <hlm-option value="user">User</hlm-option>
+            </hlm-select-content>
+          </brn-select>
+          <brn-select
+            class="inline-block"
+            placeholder="Subscription Status"
+            [(value)]="subscriptionStatus"
+          >
+            <hlm-select-trigger class="w-56">
+              <hlm-select-value />
+            </hlm-select-trigger>
+            <hlm-select-content>
+              <hlm-option value="">All</hlm-option>
+              <hlm-option value="Active">Active</hlm-option>
+              <hlm-option value="Inactive">Inactive</hlm-option>
+            </hlm-select-content>
+          </brn-select>
+          <div class="mr-2 w-full">
+            <div class="relative inline-block w-full">
+              <span
+                class="text-muted-foreground absolute left-3 top-1/4 transform"
+              >
+                <ng-icon name="lucideSearch" />
+              </span>
+              <input
+                type="text"
+                placeholder="Search"
+                [(ngModel)]="searchText"
+                hlmInput
+                class="bg-muted w-full pl-8"
+                (change)="updateTable(role(), subscriptionStatus(), searchText)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+      <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>email</th>
+              <th>Role</th>
+              <th>Subscription status</th>
+              <th>Plan</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(user of displayData(); track user.email){
+            <tr>
+              <td>{{user.username}}</td>
+              <td>{{user.email}}</td>
+              <td>{{user.role}}</td>
+              <td>
+                @if(user. is_subscribed ){
+                <span hlmBadge [variant]="'success'">Active</span>} @else {
+                <span hlmBadge [variant]="'error'">Inactive</span>
+                }
+              </td>
+              <td>{{user.plan_name}}</td>
+              <td>
+                <div class="flex gap-2">
+                  <app-add-user
+                    [user]="user"
+                    [isEdit]="true"
+                    [plans]="plans"
+                    (refreshUser)="getUsers()"
+                    [isAdmin]="currentUser.role === 'admin'"
+                  />
+                  <button hlmBtn variant="ghost" class="px-2! text-destructive!" (click)="deleteUser(user.id)">
+                    <ng-icon name="lucideTrash2" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+        <app-pagination
+          [(data)]="filteredUsers"
+          [(page)]="pageNumber"
+          [(rowsPerPage)]="rowsPerPage"
+        />
+      </div>
+    </div>
+  </div>
+</div>

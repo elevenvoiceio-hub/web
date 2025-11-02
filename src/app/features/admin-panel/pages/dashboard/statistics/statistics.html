@@ -1,0 +1,63 @@
+<div
+  class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4"
+>
+  <div class="w-full col-span-full">
+    <h1 class="text-2xl font-bold">
+      <ng-icon name="lucideUsers" class="mr-1"></ng-icon>Users Statistics
+    </h1>
+  </div>
+  <app-stat-card [title]="'Active Users'" [value]="stats?.users?.active" />
+  <app-stat-card [title]="'Total Users'" [value]="stats?.users?.total" />
+  <div class="w-full col-span-full">
+    <h1 class="text-2xl font-bold">
+      <ng-icon name="remixMoneyRupeeCircleFill" class="mr-1"></ng-icon
+      >Subscriptions Statistics
+    </h1>
+  </div>
+  <app-stat-card
+    [title]="'Today Subscribed Users'"
+    [value]="stats?.users?.today_subscribed"
+  />
+  <app-stat-card
+    [title]="'This Week Subscribed Users'"
+    [value]="stats?.users?.week_subscribed"
+  />
+  <app-stat-card
+    [title]="'Total Subscribed Users'"
+    [value]="stats?.users?.total_subscribed"
+  />
+  <div class="w-full col-span-full">
+    <div class="grid grid-cols-1 lg:grid-cols-2">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <h1 class="col-span-full text-2xl font-bold">
+          <ng-icon name="remixUserVoiceFill" class="mr-1"></ng-icon>Voice
+          Statistics
+        </h1>
+        <app-stat-card
+          [title]="'Active Voices'"
+          [value]="stats?.voices?.active"
+        />
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <h1 class="col-span-full text-2xl font-bold">
+          <ng-icon name="remixAiGenerate2" class="mr-1"></ng-icon>AI Model
+          Statistics
+        </h1>
+        <app-stat-card
+          [title]="'Active AI Models'"
+          [value]="stats?.models?.active"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="w-full col-span-full">
+    <h1 class="text-2xl font-bold">
+      <ng-icon name="remixFeedbackLine" class="mr-1"></ng-icon>Service Request
+      Statistics
+    </h1>
+  </div>
+  <app-stat-card
+    [title]="'Open Service Requests'"
+    [value]="stats?.service_request?.open"
+  />
+</div>

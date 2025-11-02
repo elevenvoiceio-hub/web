@@ -1,0 +1,129 @@
+<div class="flex min-h-screen h-screen bg-background pt-6">
+  <div
+    class="flex flex-col items-center gap-10 h-full mx-auto w-[90%] animate-fade md:w-6/12 lg:w-[30%] pt-2 pb-4"
+  >
+    <div class="flex flex-nowrap items-center gap-2">
+      <div class="flex items-center gap-2">
+        <ng-icon name="lucideAudioLines" size="2rem" />
+        <h2 class="font-semibold text-lg">AI Awaaz</h2>
+      </div>
+    </div>
+    <div class="w-full px-2 lg:px-12">
+      <h2 class="text-2xl font-bold text-center">Create your account</h2>
+      <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+        <div class="mt-3">
+          <input
+            id="fullName"
+            placeholder="Full Name"
+            required
+            type="text"
+            formControlName="username"
+            hlmInput
+            class="w-full"
+          />
+        </div>
+        <div class="mt-3">
+          <input
+            id="email"
+            placeholder="Email"
+            required
+            type="email"
+            formControlName="email"
+            hlmInput
+            class="w-full"
+          />
+        </div>
+        <div class="mt-3">
+          <div class="relative">
+            <input
+              placeholder="Password"
+              id="password"
+              required
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              hlmInput
+              class="w-full"
+            /><button
+              class="rounded-xl text-xs absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 px-0"
+              hlmBtn
+              variant="ghost"
+              type="button"
+              (click)="showPassword = !showPassword"
+            >
+              @if(showPassword){
+              <ng-icon name="lucideEyeOff" />
+              } @else{
+              <ng-icon name="lucideEye" />
+              }
+            </button>
+          </div>
+        </div>
+        <div class="mt-3">
+          <div class="relative">
+            <input
+              placeholder="Repeat Password"
+              id="passwordRepeat"
+              required
+              [type]="showRePassword ? 'text' : 'password'"
+              formControlName="passwordRepeat"
+              hlmInput
+              class="w-full"
+            /><button
+              class="rounded-xl text-xs absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 px-0"
+              hlmBtn
+              variant="ghost"
+              type="button"
+              (click)="showRePassword = !showRePassword"
+            >
+              @if(showRePassword){
+              <ng-icon name="lucideEyeOff" />
+              } @else{
+              <ng-icon name="lucideEye" />
+              }
+            </button>
+          </div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <small class="text-muted-foreground"
+            >Password must be at least 6 characters</small
+          >
+           @if(signUpForm.get('password')?.touched &&
+          signUpForm.get('passwordRepeat')?.touched &&
+          signUpForm.get('password')?.value !==
+          signUpForm.get('passwordRepeat')?.value){
+          <small class="text-red-500">Password does not match</small>
+          }
+        </div>
+        <div class="mt-3">
+          <button
+            hlmBtn
+            type="submit"
+            class="w-full"
+            [disabled]="!signUpForm.valid || signUpForm.get('password')?.value !== signUpForm.get('passwordRepeat')?.value"
+          >
+            Sign Up
+          </button>
+        </div>
+        <div class="mt-3">
+          <a
+            class="block w-full px-4 py-3 text-center"
+            routerLink="/login"
+            data-discover="true"
+            >Already have an account? <span class="underline">Sign in</span></a
+          >
+        </div>
+      </form>
+    </div>
+    <span class="mt-auto block text-center text-sm"
+      >By continuing, you accept the
+      <a
+        class="underline"
+        routerLink="terms-and-conditions"
+        target="_blank"
+        rel="noopener noreferrer"
+        >terms of use</a
+      >
+      .</span
+    >
+  </div>
+</div>

@@ -1,0 +1,26 @@
+@if(tabs.length > 0){
+<hlm-tabs [tab]="tabs[0]" class="w-full">
+  @if(tabs.length > 1){
+  <div class="flex justify-center">
+    <hlm-tabs-list class="felx" aria-label="tabs example">
+      @for(tab of tabs; track tab){
+      <button hlmTabsTrigger="{{tab}}" (click)="key = tab">
+        {{tab}} @if(false){
+        <span
+          class="rounded-full ml-2 py-1 px-3 bg-indigo-600 text-white text-xs whitespace-nowrap"
+          >66%</span
+        >
+        }
+      </button>
+      }
+    </hlm-tabs-list>
+  </div>
+  }
+  <div class="mt-5">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-4">
+      @for(card of planDetails; track card.id){
+      <app-price-card [cardData]="card" [key]="key" />}
+    </div>
+  </div>
+</hlm-tabs>
+}

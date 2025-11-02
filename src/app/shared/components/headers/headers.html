@@ -1,0 +1,74 @@
+<div class="sticky top-0 z-50 w-full" data-block-type="header-wrapper">
+  <header
+    class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+  >
+    <div
+      class="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8"
+    >
+      <a
+        class="flex items-center gap-2 hover:opacity-70 h-6 cursor-pointer"
+        routerLink="/"
+      >
+        <ng-icon name="lucideAudioLines" size="2rem" />
+        <h2 class="font-semibold text-lg">AI Awaaz</h2>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+        <a
+          href="#features"
+          class="text-muted-foreground transition-colors hover:text-foreground"
+          >Features</a
+        ><a
+          routerLink="/pricing"
+          class="text-muted-foreground transition-colors hover:text-foreground"
+          >Pricing</a
+        ><a
+          href="#studio"
+          class="text-muted-foreground transition-colors hover:text-foreground"
+          >Studio</a
+        ><a
+          routerLink="/api-docs"
+          class="text-muted-foreground transition-colors hover:text-foreground"
+          >API</a
+        ><a
+          href="#faq"
+          class="text-muted-foreground transition-colors hover:text-foreground"
+          >FAQ</a
+        >
+      </nav>
+      <div class="flex items-center gap-2">
+        <a
+          class="cursor-pointer transition-colors bg-transparent text-sm hidden !px-4 py-[14px] !font-[500] !leading-none xl:block whitespace-nowrap hover:!text-[#808080]"
+          [routerLink]="['/login']"
+          ><div class="flex items-center gap-2 justify-center">Log In</div></a
+        >
+        <a hlmBtn [routerLink]="['/signup']">Sign Up</a
+        ><button
+          data-slot="sheet-trigger"
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 size-9 md:hidden"
+          type="button"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+          aria-controls="radix-:r0:"
+          data-state="closed"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-menu h-6 w-6"
+          >
+            <line x1="4" x2="20" y1="12" y2="12"></line>
+            <line x1="4" x2="20" y1="6" y2="6"></line>
+            <line x1="4" x2="20" y1="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+</div>

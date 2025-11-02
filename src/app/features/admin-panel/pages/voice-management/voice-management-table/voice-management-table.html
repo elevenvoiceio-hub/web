@@ -1,0 +1,162 @@
+<audio #audioPlayer src="path/to/your/audio.mp3"></audio>
+<div class="container mx-auto px-4 sm:px-8">
+  <div class="py-8">
+    <div class="my-2 flex sm:flex-row flex-col">
+      <div
+        class="flex flex-row mb-1 sm:mb-0 justify-end w-full overflow-auto gap-2"
+      >
+        <div class="flex gap-2">
+          <brn-select
+            class="inline-block"
+            placeholder="model"
+            [(value)]="model"
+          >
+            <hlm-select-trigger class="w-56">
+              <hlm-select-value />
+            </hlm-select-trigger>
+            <hlm-select-content>
+              <hlm-option value="">All</hlm-option>
+              @for(model of aiModels; track model.id){
+              <hlm-option [value]="model.id">{{model.provider}}</hlm-option>
+              }
+            </hlm-select-content>
+          </brn-select>
+          <brn-select
+            class="inline-block"
+            placeholder="Gender"
+            [(value)]="gender"
+          >
+            <hlm-select-trigger class="w-56">
+              <hlm-select-value />
+            </hlm-select-trigger>
+            <hlm-select-content>
+              <hlm-option value="">All</hlm-option>
+              <hlm-option value="male">Male</hlm-option>
+              <hlm-option value="female">Female</hlm-option>
+            </hlm-select-content>
+          </brn-select>
+          <brn-select
+            class="inline-block"
+            placeholder="language"
+            [(value)]="language"
+          >
+            <hlm-select-trigger class="w-56">
+              <hlm-select-value />
+            </hlm-select-trigger>
+            <hlm-select-content class="max-h-92">
+              <hlm-select-scroll-up />
+              <hlm-option value="">All</hlm-option>
+              @for(lang of languages; track lang){
+              <hlm-option [value]="lang">{{lang}}</hlm-option>
+              }
+              <hlm-select-scroll-down />
+            </hlm-select-content>
+          </brn-select>
+          <div class="mr-2 w-full">
+            <div class="relative inline-block w-full">
+              <span
+                class="text-muted-foreground absolute left-3 top-1/4 transform"
+              >
+                <ng-icon name="lucideSearch" />
+              </span>
+              <input
+                type="text"
+                placeholder="Search"
+                [(ngModel)]="searchText"
+                hlmInput
+                class="bg-muted w-full pl-8"
+                (change)="updateTable(model(), language(), gender(),searchText)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="my-2 flex sm:flex-row flex-col">
+      <div
+        class="flex flex-row mb-1 sm:mb-0 justify-end w-full overflow-auto gap-2"
+      >
+        <div class="flex gap-2">
+          <button hlmBtn (click)="toggleFilteredVoicesActivation('activate')">
+            Activate Filtered
+          </button>
+          <button
+            hlmBtn
+            variant="secondary"
+            (click)="toggleFilteredVoicesActivation('deactivate')"
+          >
+            Deactivate Filtered
+          </button>
+          @if(false){
+          <button hlmBtn (click)="toggleSelectedVoicesActivation('activate')">
+            Activate Selected
+          </button>
+          <button
+            hlmBtn
+            variant="outline"
+            (click)="toggleSelectedVoicesActivation('deactivate')"
+          >
+            Deactivate Selected</button
+          >}
+        </div>
+      </div>
+    </div>
+    <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+      <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+        <table>
+          <thead>
+            <tr>
+              <th>Voice Name</th>
+              <th>Language</th>
+              <th>Gender</th>
+              <th>Provider</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(voice of displayData(); track voice.id){
+            <tr>
+              <td>{{voice.voicename}}</td>
+              <td>{{voice.language}}</td>
+              <td>{{voice.gender}}</td>
+              <td>
+                <hlm-tooltip>
+                  <ng-icon
+                    hlmTooltipTrigger
+                    [name]="aiImageDetails[voice.model]?.icon"
+                    class="text-2xl"
+                  />
+                  <span *brnTooltipContent class="text-xs"
+                    >{{aiImageDetails[voice.model]?.provider}}</span
+                  >
+                </hlm-tooltip>
+              </td>
+              <td>
+                <div class="flex gap-2 items-center">
+                  <hlm-switch
+                    [checked]="voice.is_active"
+                    (checkedChange)="toggleOneVoiceActivation(voice, $event)"
+                  />
+                  <button
+                    hlmBtn
+                    variant="ghost"
+                    class="!px-2"
+                    (click)="playAudio(audioPlayer, voice)"
+                  >
+                    <ng-icon name="remixPlayLargeFill" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+        <app-pagination
+          [(data)]="filteredVoices"
+          [(page)]="pageNumber"
+          [(rowsPerPage)]="rowsPerPage"
+        />
+      </div>
+    </div>
+  </div>
+</div>

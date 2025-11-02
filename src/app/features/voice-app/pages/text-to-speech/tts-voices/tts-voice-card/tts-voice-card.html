@@ -1,0 +1,61 @@
+<div class="w-full cursor-pointer" style="height: 80px" (click)="selectVoice()">
+  <div
+    [class]="`relative flex items-center gap-2 rounded-sm px-2 text-sm outline-hidden select-none  py-4 justify-between ${selected() ? 'text-accent-foreground bg-primary/10' : ''} ${disabled() ? 'opacity-50 pointer-events-none' : ''}  hover:bg-primary/10`"
+    data-slot="command-item"
+    role="option"
+    style="height: 80px"
+  >
+    <div
+      class="flex w-full select-none flex-nowrap items-center justify-center gap-4 p-1 text-sm"
+    >
+      <div class="flex items-center justify-center gap-4">
+        <div class="flex flex-col gap-1">
+          <div class="flex items-center gap-2">
+            <div class="truncate text-base">{{ voice()?.voicename }}</div>
+            <div data-state="closed">
+              <button
+                class="justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 shadow-sm text-xs flex border-muted-foreground/30 cursor-pointer bg-accent hover:bg-muted items-center rounded-full border text-muted-foreground/80 px-2 h-fit py-0"
+                (click)="copyId()"
+              >
+                <div class="text-sm font-normal">Copy ID</div>
+              </button>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <div
+              class="w-fit rounded-full bg-[#4A4A4A] px-2 text-sm font-normal text-white"
+            >
+              {{voice()?.language}}
+            </div>
+            <div
+              class="w-fit rounded-full bg-[#4A4A4A] px-2 text-sm font-normal text-white"
+            >
+              {{voice()?.gender}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <button
+        class="cursor-pointer gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 text-primary-foreground hover:bg-primary/90 px-4 py-2 ml-auto flex size-10 shrink-0 items-center justify-center rounded-full bg-white shadow-md [&amp;_svg]:size-3"
+        type="button"
+        title="Play"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="black"
+          stroke="black"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-play ml-[2px] size-6"
+          aria-hidden="true"
+        >
+          <polygon points="6 3 20 12 6 21 6 3"></polygon>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<hlm-toaster />
+<div class="flex min-h-screen h-screen bg-background pt-6">
+  <div
+    class="flex flex-col items-center gap-10 h-full mx-auto w-[90%] animate-fade md:w-6/12 lg:w-[30%] pt-2 pb-4"
+  >
+    <div class="flex flex-nowrap items-center gap-2">
+      <div class="flex items-center gap-2">
+        <ng-icon name="lucideAudioLines" size="2rem" />
+        <h2 class="font-semibold text-lg">AI Awaaz</h2>
+      </div>
+    </div>
+    <div class="w-full px-2 lg:px-12">
+      <h2 class="text-2xl font-bold text-center">Verify Your Email</h2>
+      <p class="text-center text-muted-foreground pt-8">
+        A code has been sent to the email {{email}}. Please enter the code below
+        to verify your email address:
+      </p>
+      <form (ngSubmit)="onSubmit()">
+        <input
+          type="text"
+          placeholder="______"
+          maxlength="6"
+          [(ngModel)]="otp"
+          minlength="6"
+          name="otp"
+          required
+          class="tracking-[0.25rem] text-center mt-4 w-full"
+          hlmInput
+        />
+      </form>
+
+      <button
+        class="w-full mt-4"
+        hlmBtn
+        [disabled]="otp.length < 6"
+        (click)="onSubmit()"
+      >
+        Verify
+      </button>
+    </div>
+  </div>
+</div>

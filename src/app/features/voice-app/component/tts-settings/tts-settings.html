@@ -1,0 +1,183 @@
+<div
+  class="hidden h-full w-[21rem] shrink-0 grow-0 border-l border-border p-6 md:block"
+>
+  <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-2">
+      <label for="emotion">
+        Emotion
+        <hlm-tooltip>
+          <button class="p-1" hlmTooltipTrigger>
+            <ng-icon name="lucideInfo" />
+          </button>
+          <span *brnTooltipContent class="flex items-center max-w-40 text-xs">
+            Uses an AI model to change the emotion of the voice.
+          </span>
+        </hlm-tooltip>
+      </label>
+      <hlm-select
+        class="inline-block"
+        placeholder="Select an option"
+        [(value)]="emotion"
+        scrollable="true"
+        id="emotion"
+      >
+        <hlm-select-trigger class="w-full">
+          <hlm-select-value />
+        </hlm-select-trigger>
+        <hlm-select-content class="max-h-92">
+          <hlm-select-scroll-up />
+          @for(emotion of emotions(); track emotion){
+          <hlm-option [value]="emotion">{{ emotion }}</hlm-option> }
+          <hlm-select-scroll-down />
+        </hlm-select-content>
+      </hlm-select>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <div class="flex items-center justify-between">
+        <label for="pitch">
+          Pitch
+          <hlm-tooltip>
+            <button class="p-1" hlmTooltipTrigger>
+              <ng-icon name="lucideInfo" class="!text-muted-foreground" />
+            </button>
+            <span *brnTooltipContent class="flex items-center max-w-40 text-xs">
+              Uses deterministic audio post-processing to adjust the pitch at
+              which the speech is delivered.
+            </span>
+          </hlm-tooltip>
+        </label>
+        <div class="number-input">
+          <input
+            min="-50"
+            max="50"
+            step="1"
+            type="number"
+            value="-50"
+            name="pitch"
+            [value]="pitch() - 50"
+            (change)="updatePitch($event)"
+            id="pitch"
+          /><span>%</span>
+        </div>
+      </div>
+      <div class="mt-3 flex items-center justify-between text-xs">
+        <button type="button" (click)="pitch.set(0)">Low</button
+        ><button type="button" (click)="pitch.set(100)">High</button>
+      </div>
+      <hlm-slider [(value)]="pitch" />
+    </div>
+    <div class="flex flex-col gap-2">
+      <div class="flex items-center justify-between">
+        <label for="speedRate">
+          Speed Rate
+          <hlm-tooltip>
+            <button class="p-1" hlmTooltipTrigger>
+              <ng-icon name="lucideInfo" class="!text-muted-foreground" />
+            </button>
+            <span *brnTooltipContent class="flex items-center max-w-40 text-xs">
+              Uses deterministic audio post-processing to adjust the pitch at
+              which the speech is delivered.
+            </span>
+          </hlm-tooltip>
+        </label>
+        <div class="number-input">
+          <input
+            min="-50"
+            max="50"
+            step="1"
+            type="number"
+            value="-50"
+            name="pitch"
+            [value]="speedRate() - 50"
+            (change)="updateSpeedRate($event)"
+            id="speedRate"
+          /><span>%</span>
+        </div>
+      </div>
+      <div class="mt-3 flex items-center justify-between text-xs">
+        <button type="button" (click)="speedRate.set(0)">Low</button
+        ><button type="button" (click)="speedRate.set(100)">High</button>
+      </div>
+      <hlm-slider [(value)]="speedRate" />
+    </div>
+    <div class="flex w-full items-center justify-between gap-2">
+      <label for="textNormalization">
+        Text Normalization
+        <hlm-tooltip>
+          <button class="p-1" hlmTooltipTrigger>
+            <ng-icon name="lucideInfo" class="!text-muted-foreground" />
+          </button>
+          <span *brnTooltipContent class="flex items-center max-w-40 text-xs">
+            If enabled, it will transform numbers, dates, etc. into words. For
+            example, “55” is normalized into “fifty five”. This can increase
+            latency due to additional processing required for text
+            normalization.
+          </span>
+        </hlm-tooltip>
+      </label>
+      <hlm-switch [(checked)]="textNormalization" id="textNormalization" />
+    </div>
+    <div class="flex flex-col gap-2">
+      <label for="model"> Model </label>
+      <hlm-select
+        class="inline-block"
+        [(value)]="model"
+        scrollable="true"
+        id="model"
+      >
+        <hlm-select-trigger class="w-full h-full">
+          <hlm-select-value>
+            <div class="w-full" *brnSelectValue="let value">
+              <div class="flex items-center gap-2">
+                <div>{{ value.name }}</div>
+                @if(value.isRecommended){
+                <span hlmBadge variant="outline">Recommended</span>
+                }
+              </div>
+              <p class="mt-1 text-xs font-normal text-muted-foreground">
+                {{ value.description }}
+              </p>
+              <div class="mt-2">
+                <div class="flex flex-wrap items-center gap-1">
+                  @for(language of value.languages; track language){
+                  <span hlmBadge variant="secondary">{{ language }}</span>}
+                </div>
+              </div>
+            </div>
+          </hlm-select-value>
+        </hlm-select-trigger>
+        <hlm-select-content class="max-h-92">
+          <hlm-select-scroll-up />
+          @for(model of models(); track model){
+          <hlm-option [value]="model" class="border border-border mb-1"
+            ><div class="w-full model-option">
+              <div class="flex items-center gap-2">
+                <div>{{ model.name }}</div>
+                @if(model.isRecommended){
+                <span hlmBadge variant="outline">Recommended</span>
+                }
+              </div>
+              <p class="mt-1 text-xs font-normal text-muted-foreground">
+                {{ model.description }}
+              </p>
+              <div class="mt-2">
+                <div class="flex flex-wrap items-center gap-1">
+                  @for(language of model.languages; track language){
+                  <span
+                    hlmBadge
+                    variant="secondary"
+                    class="lan-badge hover:bg-zinc-700"
+                    >{{ language }}</span
+                  >}
+                </div>
+              </div>
+            </div></hlm-option
+          >
+          }
+          <hlm-select-scroll-down />
+        </hlm-select-content>
+      </hlm-select>
+    </div>
+  </div>
+</div>

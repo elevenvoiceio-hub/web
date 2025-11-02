@@ -1,0 +1,120 @@
+<hlm-dialog-header>
+  <h3 hlmDialogTitle>Edit Tickect</h3>
+  <p hlmDialogDescription>
+    Make your changes to Tickect here. Click save when you're done.
+  </p>
+</hlm-dialog-header>
+<div class="grid gap-4 py-4">
+  <div class="grid grid-cols-4 items-center gap-4">
+    <label hlmLabel for="id" class="text-right text-muted-foreground"
+      >Ticket ID</label
+    >
+    <input
+      hlmInput
+      id="id"
+      class="col-span-3"
+      [value]="request.ticket_id"
+      readonly
+    />
+  </div>
+  <div class="grid grid-cols-4 items-center gap-4">
+    <label hlmLabel for="name" class="text-right text-muted-foreground"
+      >Created By</label
+    >
+    <input
+      hlmInput
+      id="name"
+      class="col-span-3"
+      [value]="request.created_by"
+      readonly
+    />
+  </div>
+  <div class="grid grid-cols-4 items-center gap-4">
+    <label hlmLabel for="date" class="text-right text-muted-foreground"
+      >Created On</label
+    >
+    <input
+      hlmInput
+      id="date"
+      class="col-span-3"
+      [value]="request.created_on | date : 'medium'"
+      readonly
+    />
+  </div>
+  <div class="flex flex-col gap-4">
+    <label hlmLabel for="subject" class="text-muted-foreground">Subject</label>
+    <textarea
+      hlmTextarea
+      id="subject"
+      class="col-span-3"
+      [value]="request.subject"
+      readonly
+    ></textarea>
+  </div>
+
+  <div class="grid grid-cols-4 items-center gap-4">
+    <label hlmLabel for="date" class="text-right text-muted-foreground"
+      >Created On</label
+    >
+    <input
+      hlmInput
+      id="date"
+      class="col-span-3"
+      [value]="request.created_on | date : 'medium'"
+      readonly
+    />
+  </div>
+  <form [formGroup]="requestForm">
+    <div class="grid gap-4 py-4">
+      <div class="grid grid-cols-4 items-center gap-4">
+        <label hlmLabel for="category" class="text-right text-muted-foreground"
+          >Created On</label
+        >
+        <brn-select class="inline-block" placeholder="Category" id="category" class="col-span-3" formControlName="category">
+          <hlm-select-trigger>
+            <hlm-select-value />
+          </hlm-select-trigger>
+          <hlm-select-content>
+            @for(category of CATEGORY_CHOICES; track category.label ){
+            <hlm-option [value]="category.value">{{category.label}}</hlm-option>
+            }
+          </hlm-select-content>
+        </brn-select>
+      </div>
+      <div class="grid grid-cols-4 items-center gap-4">
+        <label hlmLabel for="priority" class="text-right text-muted-foreground"
+          >Priority</label
+        >
+        <brn-select class="inline-block" placeholder="Priority" class="col-span-3" formControlName="priority">
+          <hlm-select-trigger>
+            <hlm-select-value />
+          </hlm-select-trigger>
+          <hlm-select-content>
+            @for(priority of PRIORITY_CHOICES; track priority.label ){
+            <hlm-option [value]="priority.value">{{priority.label}}</hlm-option>
+            }
+          </hlm-select-content>
+        </brn-select>
+      </div>
+      <div class="grid grid-cols-4 items-center gap-4">
+        <label hlmLabel for="status" class="text-right text-muted-foreground"
+          >Status</label
+        >
+        <brn-select class="inline-block" placeholder="Status" class="col-span-3" formControlName="status">
+          <hlm-select-trigger>
+            <hlm-select-value />
+          </hlm-select-trigger>
+          <hlm-select-content>
+            <hlm-option value="">All</hlm-option>
+            @for(choice of STATUS_CHOICES; track choice.label ){
+            <hlm-option [value]="choice.value">{{choice.label}}</hlm-option>
+            }
+          </hlm-select-content>
+        </brn-select>
+      </div>
+    </div>
+  </form>
+</div>
+<hlm-dialog-footer>
+  <button hlmBtn type="submit" (click)="onSubmit()">Save changes</button>
+</hlm-dialog-footer>

@@ -1,0 +1,18 @@
+<form
+  class="h-full flex flex-col justify-center items-center gap-4 p-4 cursor-pointer hover:bg-primary/10 transition bg-[#1f1d21] rounded w-full"
+  appDragAndDrop
+  (files)="filesDropped.emit($event)"
+  (click)="fileInput.click()"
+>
+  <input
+    type="file"
+    hidden
+    #fileInput
+    accept="audio/*"
+    (change)="onFilesSelected($event)"
+  />
+  <div class="flex gap-2 items-center flex-col">
+    <ng-icon name="lucideUpload" class="!size-8"></ng-icon>
+    <p>Click to Upload or Drag and Drop</p>
+  </div>
+</form>

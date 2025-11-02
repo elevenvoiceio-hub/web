@@ -1,0 +1,102 @@
+<app-side-menu>
+  <div class="h-full flex-col flex gap-1 py-2">
+    <button
+      [routerLink]="'/app/text-to-speech'"
+      routerLinkActive="active"
+      class="side-bar-tab"
+    >
+      <ng-icon name="lucideMic" />
+      <span>Text to Speech</span>
+    </button>
+    <button
+      [routerLink]="'/app/voice-cloning'"
+      routerLinkActive="active"
+      class="side-bar-tab"
+    >
+      <ng-icon name="lucideSquareStack" />
+
+      <span>Voice Cloning</span>
+    </button>
+    <button
+      [routerLink]="'/app/speech-to-text'"
+      routerLinkActive="active"
+      class="side-bar-tab"
+    >
+      <ng-icon name="remixVoiceRecognitionLine" />
+
+      <span>Speech to Text</span>
+    </button>
+    <button
+      [routerLink]="'/app/voices'"
+      routerLinkActive="active"
+      class="side-bar-tab"
+    >
+      <ng-icon name="lucideMicVocal" />
+
+      <span>Voices</span>
+    </button>
+
+    <button
+      [routerLink]="'/billing'"
+      class="side-bar-tab"
+      routerLinkActive="active"
+    >
+      <ng-icon name="lucideCreditCard" />
+
+      <span>Billing</span>
+    </button>
+    @if(false){
+    <button [routerLink]="'/app/speech-to-text'" class="side-bar-tab">
+      <ng-icon name="lucideChartColumn" />
+
+      <span>Usage</span></button
+    >}
+  </div>
+
+  <div id="sidebar-bottom" class="flex flex-col gap-2">
+    <div class="rounded bg-muted px-4 py-3 text-xs">
+      <div class="flex flex-col gap-1 font-normal">
+        <div class="text-muted-foreground">Remaining Balance</div>
+        <div class="flex items-center">
+          @if(userData?.role === 'admin' || userData?.role === 'subadmin'){
+          <ng-icon name="lucideInfinity" class="mr-2"> </ng-icon>
+          } @else { {{ tokens | number : "" : "en-In" }} } Chars
+        </div>
+      </div>
+    </div>
+
+    <div class="py-2 flex-col flex gap-1">
+      @if(false) {
+      <button class="side-bar-tab h-12">
+        <ng-icon name="lucideBookOpenText" class="w-5!" />
+        <div class="flex justify-between items-center w-full">
+          <span class="text-sm">Docs</span>
+          <ng-icon
+            name="lucideSquareArrowOutUpRight"
+            class="size-3.5! text-muted-foreground!"
+          />
+        </div></button
+      >}
+      <a class="side-bar-tab h-12" href="/feedback" target="_blank">
+        <ng-icon name="remixFeedbackLine" class="overflow-visible!" />
+        <div class="flex justify-between items-center w-full">
+          <span class="text-sm">Share Feedback</span>
+          <ng-icon
+            name="lucideSquareArrowOutUpRight"
+            class="size-3.5! text-muted-foreground!"
+          />
+        </div>
+      </a>
+      <a class="side-bar-tab" href="/terms-and-conditions" target="_blank">
+        <ng-icon name="lucideBookCheck" />
+        <div class="flex justify-between items-center w-full">
+          <span class="text-sm">Terms & Conditions</span>
+          <ng-icon
+            name="lucideSquareArrowOutUpRight"
+            class="size-3.5! text-muted-foreground!"
+          />
+        </div>
+      </a>
+    </div>
+  </div>
+</app-side-menu>

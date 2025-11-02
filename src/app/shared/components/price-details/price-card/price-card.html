@@ -1,0 +1,50 @@
+<div
+  class="bg-muted/30 dark:bg-[#1e1e1f] rounded-2xl lg:rounded-3xl p-5 md:p-6 lg:p-8 h-full"
+>
+  <div class="flex justify-between items-center gap-2">
+    <div class="uppercase text-muted-foreground">{{ cardData()?.name }}</div>
+    @if(cardData()?.is_popular){
+    <div
+      class="bg-indigo-600 text-xs px-3 py-1 uppercase rounded-lg text-white"
+    >
+      MOST POPULAR
+    </div>
+    }
+  </div>
+  <div>
+    <div
+      class="flex flex-col mt-8 md:flex-row items-baseline justify-between gap-2"
+    >
+      <div class="flex gap-1 items-baseline text-4xl">
+        {{price}}
+        <span class="uppercase text-sm">/{{this.key()}}</span>
+      </div>
+      <div class="text-sub-heading-caps-2"></div>
+    </div>
+    <div class="mt-4 text-muted-foreground prose-p:text-body-3">
+      <p>{{ cardData()?.description }}</p>
+    </div>
+  </div>
+  <div class="flex flex-col lg:flex-col-reverse mt-8 lg:mt-6 gap-12">
+    <ul
+      class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-x-12 lg:grid-cols-1"
+    >
+      @for(data of cardData()?.features; track data){
+      <li class="flex items-center gap-3">
+        <span class="text-[20px]"
+          ><ng-icon name="lucideCheck" class="!text-muted-foreground"></ng-icon
+        ></span>
+        <span>{{data}}</span>
+      </li>
+      } @for(data of cardData()?.limitations; track data){
+      <li class="flex items-center gap-3 text-red-500">
+        <span class="text-[20px]"><ng-icon name="lucideX" /></span>
+        <span>{{data}}</span>
+      </li>
+      }
+    </ul>
+    <a hlmBtn [variant]="cardData()?.is_popular? 'default' : 'tertiary'"
+      ><div class="flex items-center gap-2 justify-center">Select Plan</div></a
+    >
+  </div>
+</div>

@@ -1,0 +1,46 @@
+<audio #audioPlayer src=""></audio>
+<div class="h-full flex flex-col">
+  <div class="component-heading">
+    <h1>Voice Cloning</h1>
+  </div>
+  <main class="flex h-full">
+    <div class="flex h-full shrink grow flex-col p-4">
+      <div class="mt-6 flex flex-col gap-4">
+        <app-voice-cloning-card />
+
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:gap-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6"
+        >
+          @if(filterLanguage?.length > 0){ @for(country of filterLanguage; track
+          country.locale) { @if(country.locale === language()?.code ||
+          !language()?.code || language()?.code === 'All'){
+
+          <div class="w-full col-span-full">
+            <div
+              class="flex items-center bg-background p-4 text-sm font-medium text-muted-foreground"
+            >
+              <span
+                [class]="`fi fi-${country.locale?.split('-')?.[1]?.toLowerCase()} mr-2`"
+              ></span>
+              <p class="inline-block">
+                {{ country.country }} · {{ country.language }}
+              </p>
+            </div>
+          </div>
+
+          @for(voice of country.voices; track voice.id) { @if(showVoice(voice)){
+          <app-voice-card
+            [voice]="voice"
+            [language]="country.language"
+            (playAudio)="playAudio.emit(voice)"
+            [isFavortieVoice]="isFavorite(voice.id)"
+            (removeFavorite)="removeFourite(voice)"
+            (addFavorite)="addFavorite(voice)"
+          />} } }}}@else {
+          <div class="text-muted-foreground">No Voices Found</div>
+          }
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

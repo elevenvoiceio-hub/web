@@ -1,0 +1,54 @@
+<audio #audioPlayer src=""></audio>
+<div class="h-full flex flex-col">
+  <div class="component-heading">
+    <h1>Voices</h1>
+  </div>
+  <app-voices-filter
+    [(language)]="language"
+    [(gender)]="gender"
+    [(searchText)]="searchText"
+    [languages]="languagesFilterArray()"
+  />
+  <div class="p-4">
+    <hlm-tabs tab="all" class="w-full">
+      <hlm-tabs-list aria-label="tabs example">
+        <button hlmTabsTrigger="all" (click)="tab = 'all'">All</button>
+        <button hlmTabsTrigger="cloned" (click)="tab = 'cloned'">Cloned</button>
+        <button hlmTabsTrigger="favorite" (click)="tab = 'favorite'">
+          Favorite
+        </button>
+      </hlm-tabs-list>
+      <div hlmTabsContent="all">
+        @if(tab === 'all'){
+        <app-all-voices
+          [language]="language()"
+          [gender]="gender()"
+          [searchText]="searchText()"
+          (playAudio)="playAudio(audioPlayer, $event)"
+          (languageFilterArray)="languagesFilterArray.set($event)"
+        />}
+      </div>
+      <div hlmTabsContent="cloned">
+        @if(tab === 'cloned'){
+        <app-cloned-voices
+          [language]="language()"
+          [gender]="gender()"
+          [searchText]="searchText()"
+          (playAudio)="playAudio(audioPlayer, $event)"
+          (languageFilterArray)="languagesFilterArray.set($event)"
+        />}
+      </div>
+      <div hlmTabsContent="favorite">
+        @if(tab === 'favorite'){
+        <app-favorite-voices
+          [language]="language()"
+          [gender]="gender()"
+          [searchText]="searchText()"
+          (playAudio)="playAudio(audioPlayer, $event)"
+          (languageFilterArray)="languagesFilterArray.set($event)"
+        />
+        }
+      </div>
+    </hlm-tabs>
+  </div>
+</div>
