@@ -1,3 +1,3 @@
 export const environment = {
-  baseUrl: 'https://backend-0nbu.onrender.com/api',
+  baseUrl: 'https://django-backend-741299369703.asia-south1.run.app/api',
 };
