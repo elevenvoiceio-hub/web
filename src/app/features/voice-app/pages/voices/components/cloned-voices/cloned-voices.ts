@@ -118,4 +118,8 @@ export class ClonedVoices {
         !this.searchText())
     );
   };
+
+  deleteVoice = (voice: any) => {
+    this.clonedVoices = this.clonedVoices.filter((v) => v.id !== voice.id);
+  };
 }

@@ -19,4 +19,8 @@ export class VoiceCloningService {
   getClonedVoices(): Observable<IClonedVoices[]> {
     return this.http.get<IClonedVoices[]>(`${this.baseUrl}clones/`);
   }
+
+  deleteClonedVoice(id: string) {
+    return this.http.delete(`${this.baseUrl}${id}/`);
+  }
 }

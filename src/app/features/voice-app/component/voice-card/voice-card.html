@@ -53,15 +53,27 @@
           </button>
         </div>
       </div>
+      <div class="absolute right-4 top-2 opacity-0 group-hover:lg:opacity-100">
       <button
         hlmBtn
         variant="ghost"
-        class="absolute right-4 top-2 opacity-0 group-hover:lg:opacity-100 rounded-full text-accent-foreground/80 hover:bg-accent z-50"
+        class=" rounded-full text-accent-foreground/80 hover:bg-accent z-50"
         (click)="isFavortieVoice() ? removeFavourite() : setFavourite()"
       >
         @if(isFavortieVoice()) {<ng-icon name="remixHeartFill"></ng-icon>}@else{
         <ng-icon name="remixHeartLine"></ng-icon>}
       </button>
+      @if(isCloining()) {
+      <button hlmBtn
+        variant="ghost"
+        class=" ml-2 rounded-full text-accent-foreground/80 hover:bg-accent z-50"
+        (click)="deleteVoice()"
+
+      >
+        <ng-icon name="remixDeleteBin6Line"></ng-icon>
+      </button>
+    }
+      </div>
     </div>
     <div class="mt-4 w-full truncate text-center text-base font-medium">
       {{ voice().voicename }}

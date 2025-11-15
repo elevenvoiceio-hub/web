@@ -36,6 +36,7 @@
             [isFavortieVoice]="isFavorite(voice.id)"
             (removeFavorite)="removeFourite(voice)"
             (addFavorite)="addFavorite(voice)"
+            (deleteVoiceEvent)="deleteVoice(voice)"
           />} } }}}@else {
           <div class="text-muted-foreground">No Voices Found</div>
           }

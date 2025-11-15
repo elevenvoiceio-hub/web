@@ -34,6 +34,8 @@
       [isFavortieVoice]="isFavorite(voice.id)"
       (removeFavorite)="removeFourite(voice)"
       (addFavorite)="addFavorite(voice)"
+      (deleteVoiceEvent)="deleteVoice(voice)"
+      (playAudio)="playAudio(audioPlayer, $event)"
     />} } }
       </div>
       </div>

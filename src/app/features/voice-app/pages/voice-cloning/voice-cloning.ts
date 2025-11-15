@@ -95,4 +95,14 @@ export class VoiceCloning {
   addFavorite = (voice: any) => {
     this.favVoiceIds = [...this.favVoiceIds, voice.id];
   };
+
+  deleteVoice = (voice: any) => {
+    this.clonedVoices = this.clonedVoices.filter((v) => v.id !== voice.id);
+  };
+
+  playAudio(audioElement: HTMLMediaElement, voice: any): void {
+    audioElement.pause();
+    audioElement.src = voice.sample_url;
+    audioElement.play();
+  }
 }
