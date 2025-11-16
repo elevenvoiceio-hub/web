@@ -112,7 +112,6 @@ export class AddUser {
     this.userForm.valueChanges.subscribe((changes) => {
       this.planChanges = initialValues.plan !== changes.plan;
       this.otherChanges =
-        initialValues.username !== changes.username ||
         initialValues.email !== changes.email ||
         initialValues.role !== changes.role ||
         initialValues.password !== changes.password ||

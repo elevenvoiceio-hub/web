@@ -79,6 +79,6 @@ export class UserService {
   }
 
   updateUserRole(userId: number, role: string) {
-    return this.http.put(`${this.baseUrl}update-role/${userId}`, { role });
+    return this.http.put(`${this.baseUrl}update-role/${userId}/`, { role });
   }
 }
