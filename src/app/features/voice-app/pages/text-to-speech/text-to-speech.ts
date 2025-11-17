@@ -252,7 +252,7 @@ export class TextToSpeech implements OnInit {
   }
 
   getUserSubscription(findMyPlan?: boolean) {
-    if (this.user?.role !== 'admin' && this.user?.role !== 'subadmin') {
+    
       this.subscriptionService
         .checkUserSubscription()
         .subscribe((res: IMySubscription) => {
@@ -263,6 +263,9 @@ export class TextToSpeech implements OnInit {
               (plan: IPlan) => plan.id === this.userSubscription?.plan_id
             );
           }
+          if(res.plan_id === "admin_access"){
+              this.textareaMaxLength = 2000;
+          } else {
           this.textareaMaxLength =
             ((this.userSubscription?.remainining_character_credits ?? 0) >
               (this.selectedPlan?.default_character_limit ?? 0)
@@ -270,9 +273,8 @@ export class TextToSpeech implements OnInit {
               : (this.userSubscription?.remainining_character_credits ?? 0) > 2000
                 ? 2000
                 : this.userSubscription?.remainining_character_credits ?? 0);
+              }
         });
-    } else {
-      this.textareaMaxLength = 2000;
-    }
+    
   }
 }
