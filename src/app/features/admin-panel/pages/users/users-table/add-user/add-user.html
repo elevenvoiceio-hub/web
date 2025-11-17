@@ -55,8 +55,7 @@
             formControlName="repeatPassword"
           />
         </div>
-        }
-        @if(isAdmin()){
+        } @if(isAdmin()){
         <div class="grid grid-cols-4 items-center gap-4">
           <label hlmLabel for="repassword" class="text-right">Role</label>
           <brn-select
@@ -73,13 +72,15 @@
               <hlm-option value="user">User</hlm-option>
             </hlm-select-content>
           </brn-select>
-        </div>}
+        </div>
+        }
         <div class="grid grid-cols-4 items-center gap-4">
           <label hlmLabel for="repassword" class="text-right">Plan</label>
           <brn-select
             class="inline-block"
             placeholder="Plan"
             formControlName="plan"
+            (valueChange)="valueChangePlan($event)"
           >
             <hlm-select-trigger class="w-56">
               <hlm-select-value />
@@ -93,6 +94,31 @@
             </hlm-select-content>
           </brn-select>
         </div>
+        @if(selectedPlan){
+        <div class="grid grid-cols-4 items-center gap-4">
+          <label hlmLabel for="repassword" class="text-right"
+            >Plan duration</label
+          >
+          <brn-select
+            class="inline-block"
+            placeholder="Plan"
+            formControlName="plan_duration"
+          >
+            <hlm-select-trigger class="w-56">
+              <hlm-select-value />
+            </hlm-select-trigger>
+            <hlm-select-content>
+              @if(selectedPlan.price.monthly){
+              <hlm-option value="30">Monthly</hlm-option>
+              } @if(selectedPlan.price.yearly){
+              <hlm-option value="365">Yearly</hlm-option>
+              } @if(selectedPlan.price.lifetime){
+              <hlm-option value="lifetime">Lifetime</hlm-option>
+              }
+            </hlm-select-content>
+          </brn-select>
+        </div>
+        }
       </div>
     </form>
     <hlm-dialog-footer>
