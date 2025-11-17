@@ -240,8 +240,14 @@ export class TextToSpeech implements OnInit {
       .replaceAll('>', '&gt;')
       .replaceAll('"', '&quot;')
       .replaceAll("'", '&apos;');
+    
+    let emotion: string = '';
 
-    return `<speak><prosody pitch="${this.pitch()}%" rate="${this.speedRate()}%"><speechify:style emotion="${this.emotion().toLowerCase()}">${escapeSSMLChars}</speechify:style></prosody></speak>`;
+    if(this.emotion().toLowerCase() !== None){
+      emotion = `<speechify:style emotion="${this.emotion().toLowerCase()}">`
+    }
+
+    return `<speak><prosody pitch="${this.pitch()}%" rate="${this.speedRate()}%">${emotion}${escapeSSMLChars}${this.emotion().toLowerCase() !== 'none'? "</speechify:style>" : ''}</prosody></speak>`;
   };
 
   getAllPlans() {
