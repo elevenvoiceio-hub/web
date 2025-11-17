@@ -102,7 +102,7 @@ export class TextToSpeech implements OnInit {
         });
       }
     });
-    this.userService.UserDetails.subscribe((data) => user = data);
+    this.userService.UserDetails.subscribe((data) => this.user = data);
     this.getAllPlans();
   }
 
@@ -252,25 +252,26 @@ export class TextToSpeech implements OnInit {
   }
 
   getUserSubscription(findMyPlan?: boolean) {
-    if(user?.role !=='admin' && user?.role !== 'subadmin'){
-    this.subscriptionService
-      .checkUserSubscription()
-      .subscribe((res: IMySubscription) => {
-        this.userSubscription = res;
-        this.userService.UserSubscriptionData = res;
-        if (findMyPlan) {
-          this.selectedPlan = this.plans.find(
-            (plan: IPlan) => plan.id === this.userSubscription?.plan_id
-          );
-        }
-        this.textareaMaxLength =
-          ((this.userSubscription?.remainining_character_credits ?? 0) >
-          (this.selectedPlan?.default_character_limit ?? 0)
-            ? this.selectedPlan?.default_character_limit ?? 0
-            : (this.userSubscription?.remainining_character_credits ?? 0) > 2000
-            ? 2000
-            : this.userSubscription?.remainining_character_credits ?? 0);
-      });} else {
+    if (this.user?.role !== 'admin' && this.user?.role !== 'subadmin') {
+      this.subscriptionService
+        .checkUserSubscription()
+        .subscribe((res: IMySubscription) => {
+          this.userSubscription = res;
+          this.userService.UserSubscriptionData = res;
+          if (findMyPlan) {
+            this.selectedPlan = this.plans.find(
+              (plan: IPlan) => plan.id === this.userSubscription?.plan_id
+            );
+          }
+          this.textareaMaxLength =
+            ((this.userSubscription?.remainining_character_credits ?? 0) >
+              (this.selectedPlan?.default_character_limit ?? 0)
+              ? this.selectedPlan?.default_character_limit ?? 0
+              : (this.userSubscription?.remainining_character_credits ?? 0) > 2000
+                ? 2000
+                : this.userSubscription?.remainining_character_credits ?? 0);
+        });
+    } else {
       this.textareaMaxLength = 2000;
     }
   }
