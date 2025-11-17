@@ -190,8 +190,7 @@ export class AddUser {
           ?.setValue(
             daysDifference > 365 ? 'lifetime' : daysDifference.toString()
           );
-        this.selectedPlan =
-          this.plans().find((plan) => plan.id === data?.id) || null;
+        this.selectedPlan = data.subscription || null;
       });
   }
   getDaysBetweenDates(startDate: string, endDate: string) {
@@ -201,7 +200,7 @@ export class AddUser {
     const timeDifference = date2.getTime() - date1.getTime();
     const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
 
-    const daysDifference = Math.floor(timeDifference / oneDayInMilliseconds);
+    const daysDifference = Math.ceil(timeDifference / oneDayInMilliseconds);
     return daysDifference;
   }
 

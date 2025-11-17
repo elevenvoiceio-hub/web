@@ -111,7 +111,6 @@ export class UsersTable {
 
   getPlansList() {
     this.subscriptionsService.getSubscriptions().subscribe((res: any) => {
-      console.log(res);
       this.plans = res;
     });
   }

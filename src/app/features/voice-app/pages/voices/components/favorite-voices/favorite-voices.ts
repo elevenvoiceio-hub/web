@@ -75,6 +75,5 @@ export class FavoriteVoices {
         ),
       };
     }).filter(category => category.voices.length > 0);
-    console.log(this.voices);
   }
 }
