@@ -84,6 +84,7 @@ export class TextToSpeech implements OnInit {
   selectedPlan: IPlan | undefined;
 
   textareaMaxLength = 2000;
+  user: any;
 
   constructor(
     private aiManagementService: AiManagementService,
@@ -101,6 +102,7 @@ export class TextToSpeech implements OnInit {
         });
       }
     });
+    this.userService.UserDetails.subscribe((data) => user = data);
     this.getAllPlans();
   }
 
@@ -250,6 +252,7 @@ export class TextToSpeech implements OnInit {
   }
 
   getUserSubscription(findMyPlan?: boolean) {
+    if(user?.role !=='admin' && user?.role !== 'subadmin'){
     this.subscriptionService
       .checkUserSubscription()
       .subscribe((res: IMySubscription) => {
@@ -267,6 +270,8 @@ export class TextToSpeech implements OnInit {
             : (this.userSubscription?.remainining_character_credits ?? 0) > 2000
             ? 2000
             : this.userSubscription?.remainining_character_credits ?? 0);
-      });
+      });} else {
+      this.textareaMaxLength = 2000;
+    }
   }
 }
