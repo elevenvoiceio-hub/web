@@ -243,7 +243,7 @@ export class TextToSpeech implements OnInit {
     
     let emotion: string = '';
 
-    if(this.emotion().toLowerCase() !== None){
+    if(this.emotion().toLowerCase() !== "none"){
       emotion = `<speechify:style emotion="${this.emotion().toLowerCase()}">`
     }
 
