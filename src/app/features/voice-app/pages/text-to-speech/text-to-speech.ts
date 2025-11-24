@@ -240,14 +240,14 @@ export class TextToSpeech implements OnInit {
       .replaceAll('>', '&gt;')
       .replaceAll('"', '&quot;')
       .replaceAll("'", '&apos;');
-    
+
     let emotion: string = '';
 
     if(this.emotion().toLowerCase() !== "none"){
       emotion = `<speechify:style emotion="${this.emotion().toLowerCase()}">`
     }
 
-    return `<speak><prosody pitch="${this.pitch()}%" rate="${this.speedRate()}%">${emotion}${escapeSSMLChars}${this.emotion().toLowerCase() !== 'none'? "</speechify:style>" : ''}</prosody></speak>`;
+    return `<speak><prosody pitch="${this.pitch()-50}%" rate="${this.speedRate()-50}%">${emotion}${escapeSSMLChars}${this.emotion().toLowerCase() !== 'none'? "</speechify:style>" : ''}</prosody></speak>`;
   };
 
   getAllPlans() {
@@ -258,7 +258,7 @@ export class TextToSpeech implements OnInit {
   }
 
   getUserSubscription(findMyPlan?: boolean) {
-    
+
       this.subscriptionService
         .checkUserSubscription()
         .subscribe((res: IMySubscription) => {
@@ -281,6 +281,6 @@ export class TextToSpeech implements OnInit {
                 : this.userSubscription?.remainining_character_credits ?? 0);
               }
         });
-    
+
   }
 }
