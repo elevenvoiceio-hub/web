@@ -48,6 +48,7 @@ export class FavoriteVoices {
       languageArray.push({
         name: language.language,
         country: language.country,
+        code: language.locale,
       });
     });
     this.languageFilterArray.emit(languageArray);
