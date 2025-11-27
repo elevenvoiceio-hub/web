@@ -2,16 +2,13 @@ import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCircleStop, lucideMic } from '@ng-icons/lucide';
-import { HlmButton } from '@spartan-ng/helm/button';
 
 @Component({
   selector: 'app-audio-recorder',
   standalone: true,
   imports: [
-    NgIcon,
-    HlmButton,
-    // CommonModule is no longer needed for @if
-  ],
+    NgIcon
+],
   providers: [provideIcons({ lucideMic, lucideCircleStop })],
   templateUrl: './audio-recorder.html',
   styleUrl: './audio-recorder.css',

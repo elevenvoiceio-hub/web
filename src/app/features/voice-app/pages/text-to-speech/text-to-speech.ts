@@ -6,13 +6,8 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown, lucideSettings } from '@ng-icons/lucide';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmButton } from '@spartan-ng/helm/button';
-import { HlmTooltip, HlmTooltipTrigger } from '@spartan-ng/helm/tooltip';
-import { BrnTooltipContentTemplate } from '@spartan-ng/brain/tooltip';
 import { BrnSelectImports } from '@spartan-ng/brain/select';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
-import { HlmSwitch } from '@spartan-ng/helm/switch';
-import { HlmSlider } from '@spartan-ng/helm/slider';
-import { HlmBadge } from '@spartan-ng/helm/badge';
 import { TTS_EMOTIONS } from '../../constants/emotions.constant';
 import { MODELS } from '../../constants/models.constant';
 import { Voices } from './tts-voices/tts-voices';
@@ -25,7 +20,6 @@ import { VoicesService } from '../../../../services/voices-service/voices-servic
 import {
   HlmSheet,
   HlmSheetContent,
-  HlmSheetHeader,
 } from '@spartan-ng/helm/sheet';
 import { BrnSheetContent, BrnSheetTrigger } from '@spartan-ng/brain/sheet';
 import { SubscriptionsService } from '../../../../services/subscriptions-service/subscriptions-service';
@@ -40,22 +34,15 @@ import { UserService } from '../../../../services/user/user-service';
     HlmInput,
     FormsModule,
     HlmButton,
-    HlmTooltip,
-    HlmTooltipTrigger,
-    BrnTooltipContentTemplate,
     BrnSelectImports,
     HlmSelectImports,
-    HlmSwitch,
-    HlmSlider,
-    HlmBadge,
     NgIcon,
     Voices,
     HlmSheet,
-    HlmSheetHeader,
     HlmSheetContent,
     BrnSheetTrigger,
-    BrnSheetContent,
-  ],
+    BrnSheetContent
+],
   templateUrl: './text-to-speech.html',
   styleUrl: './text-to-speech.css',
   providers: [
