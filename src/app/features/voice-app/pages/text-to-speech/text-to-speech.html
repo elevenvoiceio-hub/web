@@ -29,6 +29,7 @@
                 hlmBtn
                 variant="secondary"
                 class="bg-accent hover:bg-accent/60"
+                (click)="text.length? clearText() : setDemoText()"
               >
                 {{ text.length ? 'Clear text' : 'Demo Text' }}
               </button>

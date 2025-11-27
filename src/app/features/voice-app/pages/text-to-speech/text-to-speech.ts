@@ -26,6 +26,7 @@ import { SubscriptionsService } from '../../../../services/subscriptions-service
 import { IPlan } from '../../../../core/interfaces/plan.interface';
 import { IMySubscription } from '../../../../core/interfaces/subscription.interface';
 import { UserService } from '../../../../services/user/user-service';
+import { DEMO_TEXT } from '../../constants/demo-text.constant';
 
 @Component({
   selector: 'app-text-to-speech',
@@ -269,5 +270,16 @@ export class TextToSpeech implements OnInit {
               }
         });
 
+  }
+
+  setDemoText() {
+    const currentLang = this.selectedVoice()?.language_code.slice(0,2) || 'en';
+    const demoTexts = DEMO_TEXT[currentLang.toLowerCase()] || DEMO_TEXT['en'];
+    const randomNumber = Math.floor(Math.random() * demoTexts.length);
+    this.text = demoTexts[randomNumber];
+  }
+
+  clearText() {
+    this.text = '';
   }
 }
