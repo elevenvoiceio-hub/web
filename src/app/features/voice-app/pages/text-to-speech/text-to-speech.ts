@@ -6,13 +6,8 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown, lucideSettings } from '@ng-icons/lucide';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmButton } from '@spartan-ng/helm/button';
-import { HlmTooltip, HlmTooltipTrigger } from '@spartan-ng/helm/tooltip';
-import { BrnTooltipContentTemplate } from '@spartan-ng/brain/tooltip';
 import { BrnSelectImports } from '@spartan-ng/brain/select';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
-import { HlmSwitch } from '@spartan-ng/helm/switch';
-import { HlmSlider } from '@spartan-ng/helm/slider';
-import { HlmBadge } from '@spartan-ng/helm/badge';
 import { TTS_EMOTIONS } from '../../constants/emotions.constant';
 import { MODELS } from '../../constants/models.constant';
 import { Voices } from './tts-voices/tts-voices';
@@ -25,13 +20,13 @@ import { VoicesService } from '../../../../services/voices-service/voices-servic
 import {
   HlmSheet,
   HlmSheetContent,
-  HlmSheetHeader,
 } from '@spartan-ng/helm/sheet';
 import { BrnSheetContent, BrnSheetTrigger } from '@spartan-ng/brain/sheet';
 import { SubscriptionsService } from '../../../../services/subscriptions-service/subscriptions-service';
 import { IPlan } from '../../../../core/interfaces/plan.interface';
 import { IMySubscription } from '../../../../core/interfaces/subscription.interface';
 import { UserService } from '../../../../services/user/user-service';
+import { DEMO_TEXT } from '../../constants/demo-text.constant';
 
 @Component({
   selector: 'app-text-to-speech',
@@ -40,22 +35,15 @@ import { UserService } from '../../../../services/user/user-service';
     HlmInput,
     FormsModule,
     HlmButton,
-    HlmTooltip,
-    HlmTooltipTrigger,
-    BrnTooltipContentTemplate,
     BrnSelectImports,
     HlmSelectImports,
-    HlmSwitch,
-    HlmSlider,
-    HlmBadge,
     NgIcon,
     Voices,
     HlmSheet,
-    HlmSheetHeader,
     HlmSheetContent,
     BrnSheetTrigger,
-    BrnSheetContent,
-  ],
+    BrnSheetContent
+],
   templateUrl: './text-to-speech.html',
   styleUrl: './text-to-speech.css',
   providers: [
@@ -84,6 +72,7 @@ export class TextToSpeech implements OnInit {
   selectedPlan: IPlan | undefined;
 
   textareaMaxLength = 2000;
+  user: any;
 
   constructor(
     private aiManagementService: AiManagementService,
@@ -101,6 +90,7 @@ export class TextToSpeech implements OnInit {
         });
       }
     });
+    this.userService.UserDetails.subscribe((data) => this.user = data);
     this.getAllPlans();
   }
 
@@ -239,7 +229,13 @@ export class TextToSpeech implements OnInit {
       .replaceAll('"', '&quot;')
       .replaceAll("'", '&apos;');
 
-    return `<speak><prosody pitch="${this.pitch()}%" rate="${this.speedRate()}%"><speechify:style emotion="${this.emotion().toLowerCase()}">${escapeSSMLChars}</speechify:style></prosody></speak>`;
+    let emotion: string = '';
+
+    if(this.emotion().toLowerCase() !== "none"){
+      emotion = `<speechify:style emotion="${this.emotion().toLowerCase()}">`
+    }
+
+    return `<speak><prosody pitch="${this.pitch()-50}%" rate="${this.speedRate()-50}%">${emotion}${escapeSSMLChars}${this.emotion().toLowerCase() !== 'none'? "</speechify:style>" : ''}</prosody></speak>`;
   };
 
   getAllPlans() {
@@ -250,23 +246,40 @@ export class TextToSpeech implements OnInit {
   }
 
   getUserSubscription(findMyPlan?: boolean) {
-    this.subscriptionService
-      .checkUserSubscription()
-      .subscribe((res: IMySubscription) => {
-        this.userSubscription = res;
-        this.userService.UserSubscriptionData = res;
-        if (findMyPlan) {
-          this.selectedPlan = this.plans.find(
-            (plan: IPlan) => plan.id === this.userSubscription?.plan_id
-          );
-        }
-        this.textareaMaxLength =
-          ((this.userSubscription?.remainining_character_credits ?? 0) >
-          (this.selectedPlan?.default_character_limit ?? 0)
-            ? this.selectedPlan?.default_character_limit ?? 0
-            : (this.userSubscription?.remainining_character_credits ?? 0) > 2000
-            ? 2000
-            : this.userSubscription?.remainining_character_credits ?? 0);
-      });
+
+      this.subscriptionService
+        .checkUserSubscription()
+        .subscribe((res: IMySubscription) => {
+          this.userSubscription = res;
+          this.userService.UserSubscriptionData = res;
+          if (findMyPlan) {
+            this.selectedPlan = this.plans.find(
+              (plan: IPlan) => plan.id === this.userSubscription?.plan_id
+            );
+          }
+          if(res.plan_id === "admin_access"){
+              this.textareaMaxLength = 2000;
+          } else {
+          this.textareaMaxLength =
+            ((this.userSubscription?.remainining_character_credits ?? 0) >
+              (this.selectedPlan?.default_character_limit ?? 0)
+              ? this.selectedPlan?.default_character_limit ?? 0
+              : (this.userSubscription?.remainining_character_credits ?? 0) > 2000
+                ? 2000
+                : this.userSubscription?.remainining_character_credits ?? 0);
+              }
+        });
+
+  }
+
+  setDemoText() {
+    const currentLang = this.selectedVoice()?.language_code.slice(0,2) || 'en';
+    const demoTexts = DEMO_TEXT[currentLang.toLowerCase()] || DEMO_TEXT['en'];
+    const randomNumber = Math.floor(Math.random() * demoTexts.length);
+    this.text = demoTexts[randomNumber];
+  }
+
+  clearText() {
+    this.text = '';
   }
 }

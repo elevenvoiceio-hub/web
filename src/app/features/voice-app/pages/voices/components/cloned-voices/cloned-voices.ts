@@ -72,6 +72,7 @@ export class ClonedVoices {
 
   setFilterLanguageData = (voices: any) => {
     const value = categorizeVoicesOnLocale(voices);
+    this.setLanguagesAvailable(value);
     const ITEMS_RENDERED_AT_ONCE = 2;
     const INTERVAL_IN_MS = 10;
 
@@ -92,6 +93,18 @@ export class ClonedVoices {
         currentIndex = nextIndex;
       }
     }, INTERVAL_IN_MS);
+  };
+
+  setLanguagesAvailable = (languages: any) => {
+    const languageArray: any[] = [];
+    languages.forEach((language: any) => {
+      languageArray.push({
+        name: language.language,
+        country: language.country,
+        code: language.locale,
+      });
+    });
+    this.languageFilterArray.emit(languageArray);
   };
 
   isFavorite = (voiceId: number) => {

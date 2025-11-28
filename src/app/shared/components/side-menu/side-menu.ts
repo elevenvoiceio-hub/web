@@ -95,6 +95,10 @@ export class SideMenu {
     this.userService.UserDetails.subscribe((data: any) => {
       this.setUserData(data);
     });
+
+    this.userService.UserSubscription.subscribe((data: IMySubscription | null) => {
+      this.setSubscriptionData(data);
+    });
   }
 
   lightMode = () => {

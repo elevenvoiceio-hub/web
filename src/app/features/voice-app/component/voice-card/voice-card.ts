@@ -86,11 +86,11 @@ export class VoiceCard {
   deleteVoice = () => {
     this.voiceCloningService.deleteClonedVoice(this.voice()['id']).subscribe({
       next: (res) => {
-        console.log('Cloned voice deleted successfully');
+        this.deleteVoiceEvent.emit();
+        this.commonService.setToaster('Cloned voice deleted successfully');
         // Optionally, emit an event or update the UI to reflect the deletion
       },
       error: (err) => {
-        console.error('Error deleting cloned voice:', err);
         this.commonService.setToaster('Failed to delete cloned voice');
       },
     });

@@ -56,7 +56,7 @@ export class SignUp {
 
     this.userService.registerUser(requestBody).subscribe({
       next: () => {
-        this.router.navigate(['/verify-email'], {
+        this.router.navigate(['/login'], {
           queryParams: { email: requestBody.email },
         });
       },

@@ -15,13 +15,7 @@ import { UserService } from '../../services/user/user-service';
 import { LocalStorageService } from '../../services/local-storage-service/local-storage-service';
 
 @Component({
-  imports: [
-    NgIcon,
-    RouterModule,
-    HlmButton,
-    ReactiveFormsModule,
-    HlmInput,
-],
+  imports: [NgIcon, RouterModule, HlmButton, ReactiveFormsModule, HlmInput],
   templateUrl: './login.html',
   styleUrl: './login.css',
   providers: [
@@ -60,15 +54,10 @@ export class Login {
         this.localStorageService.saveData('user', JSON.stringify(userData));
         this.route.navigate(['/app']);
       },
-      error: (error) => {
-        if (error.error.detail?.toString().includes('Email is not verified')) {
-          this.commonService.setToaster(error.error.detail);
-          this.route.navigate(['/verify-email'], {
-            queryParams: { email: this.loginForm.get('email')?.value },
-          });
-        } else {
-          this.commonService.setToaster('Failed to Login. Please try after sometime');
-        }
+      error: () => {
+        this.commonService.setToaster(
+          'Failed to Login. Please try after sometime'
+        );
       },
     });
   };

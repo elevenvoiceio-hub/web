@@ -32,8 +32,8 @@ export class SubscriptionsService {
     return this.http.post(`${this.baseUrl}assign/`, data);
   }
 
-  checkSubscription(email: string) {
-    return this.http.get(`${this.baseUrl}check/${email}/`);
+  checkSubscription(userId: number) {
+    return this.http.get(`${this.baseUrl}check/${userId}/`);
   }
 
   checkDefaultCharacterLimit(email: string) {

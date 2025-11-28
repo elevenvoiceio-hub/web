@@ -1,5 +1,4 @@
-import { Component, computed, input, output, signal } from '@angular/core';
-import { ALL_VOICES } from '../../../../constants/voices.constant';
+import { Component, input, output } from '@angular/core';
 import { LOCALE } from '../../../../constants/locale.constant';
 import { categorizeVoicesOnLocale } from '../../../../../../shared/utils/categorize.utils';
 import { VoiceCard } from '../../../../component/voice-card/voice-card';
@@ -91,6 +90,7 @@ export class AllVoices {
       languageArray.push({
         name: language.language,
         country: language.country,
+        code: language.locale,
       });
     });
     this.languageFilterArray.emit(languageArray);

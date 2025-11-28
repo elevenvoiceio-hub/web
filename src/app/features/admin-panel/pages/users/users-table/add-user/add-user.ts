@@ -56,10 +56,14 @@ export class AddUser {
     email: new FormControl('', [Validators.required, Validators.email]),
     role: new FormControl('user', [Validators.required]),
     plan: new FormControl(''),
+    plan_duration: new FormControl(30),
   });
   plans = input<IPlan[]>([]);
   planChanges = false;
   otherChanges = false;
+  selectedPlan: IPlan | null = null;
+  initialChanges = false;
+  initialValues: any;
 
   constructor(
     private readonly userService: UserService,
@@ -85,37 +89,25 @@ export class AddUser {
         this.userForm.controls['username'].disable();
         this.userForm.controls['email'].disable();
       }
-    });
-  }
+      this.getcurrentuserSubscription();
 
-  ngOnInit() {
-    this.userForm.patchValue({
-      username: this.user()?.username || '',
-      email: this.user()?.email || '',
-      role: this.user()?.role || '',
-      plan: this.user()?.plan_name || '',
-      password: '',
-      repeatPassword: '',
+      this.onUserFormChange();
     });
-    this.userForm.controls['password'].setValidators(
-      this.isEdit() ? null : [Validators.required, Validators.minLength(6)]
-    );
-    this.userForm.controls['repeatPassword'].setValidators(
-      this.isEdit() ? null : [Validators.required, Validators.minLength(6)]
-    );
-    this.onUserFormChange();
   }
 
   onUserFormChange() {
-    const initialValues = this.userForm.value;
+    if (!this.initialChanges) {
+      this.initialValues = this.userForm.value;
+      this.initialChanges = true;
+    }
 
     this.userForm.valueChanges.subscribe((changes) => {
-      this.planChanges = initialValues.plan !== changes.plan;
+      this.planChanges = this.initialValues.plan !== changes.plan;
       this.otherChanges =
-        initialValues.email !== changes.email ||
-        initialValues.role !== changes.role ||
-        initialValues.password !== changes.password ||
-        initialValues.repeatPassword !== changes.repeatPassword;
+        this.initialValues.email !== changes.email ||
+        this.initialValues.role !== changes.role ||
+        this.initialValues.password !== changes.password ||
+        this.initialValues.repeatPassword !== changes.repeatPassword;
     });
   }
 
@@ -147,18 +139,22 @@ export class AddUser {
           }
         });
     } else {
-      if (this.planChanges) {
+      if (this.planChanges || true) {
         this.assignPlanToUser(this.user()?.id ?? '');
       }
     }
   }
 
   assignPlanToUser(id: number | string) {
+    const duration_days = this.userForm.value.plan_duration;
     const requestBody: any = {
       user_id: id,
+      duration_days:
+        duration_days === 'lifetime'
+          ? this.calculateDaysUntilCenturyEnd()
+          : parseInt(duration_days.toString()),
     };
-
-    if (this.user()?.plan_name !== '') {
+    if (this.userForm.value.plan !== '') {
       requestBody['subscription_id'] =
         this.plans().find((plan) => plan.name === this.userForm.value.plan)
           ?.id ?? null;
@@ -176,5 +172,50 @@ export class AddUser {
           this.closeDialog();
         });
     }
+  }
+
+  getcurrentuserSubscription() {
+    this.subscriptionsService
+      .checkSubscription(this.user()?.id ?? 0)
+      .subscribe((data: any) => {
+        let daysDifference: number = 0;
+        if (data) {
+          daysDifference = this.getDaysBetweenDates(
+            data.start_date,
+            data.end_date
+          );
+        }
+        this.userForm
+          .get('plan_duration')
+          ?.setValue(
+            daysDifference > 365 ? 'lifetime' : daysDifference.toString()
+          );
+        this.selectedPlan = data.subscription || null;
+      });
+  }
+  getDaysBetweenDates(startDate: string, endDate: string) {
+    const date1 = new Date(startDate);
+    const date2 = new Date(endDate);
+
+    const timeDifference = date2.getTime() - date1.getTime();
+    const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
+
+    const daysDifference = Math.ceil(timeDifference / oneDayInMilliseconds);
+    return daysDifference;
+  }
+
+  valueChangePlan(event: string) {
+    this.selectedPlan =
+      this.plans().find((plan) => plan.name === event) || null;
+  }
+
+  calculateDaysUntilCenturyEnd() {
+    const today = new Date();
+    const lastDayOfCentury = new Date(2099, 11, 31, 23, 59, 59, 999); // Month is 0-indexed (11 for December)
+
+    const timeDifference = lastDayOfCentury.getTime() - today.getTime();
+    const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+    return daysDifference;
   }
 }

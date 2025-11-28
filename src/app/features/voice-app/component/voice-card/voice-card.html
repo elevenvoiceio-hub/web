@@ -26,6 +26,12 @@
         class="absolute left-1/2 top-1/2 flex size-8 lg:size-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-transparent shadow-sm transition-transform hover:scale-110 active:scale-95"
         title="Play"
         (click)="$event.stopPropagation(); playAudio.emit(voice)"
+      <div class="absolute right-4 top-2 opacity-0 group-hover:lg:opacity-100 z-50">
+      <button
+        hlmBtn
+        variant="ghost"
+        class=" rounded-full text-accent-foreground/80 hover:bg-accent "
+        (click)="isFavortieVoice() ? removeFavourite() : setFavourite()"
       >
         <ng-icon
           name="remixPlayLargeFill"
