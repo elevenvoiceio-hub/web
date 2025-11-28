@@ -14,7 +14,7 @@
 
       <hlm-sheet-content
         *brnSheetContent="let ctx"
-        class="w-60 p-0 flex flex-col"
+        class="w-60 p-0 flex flex-col shadow-none"
       >
         <ng-container
           *ngTemplateOutlet="menuContent; context: { $implicit: ctx }"
@@ -45,7 +45,9 @@
       </a>
     </div>
 
-    <ng-content />
+    <div style="display: contents" (click)="handleProjectedClick($event, ctx)">
+      <ng-content />
+    </div>
 
     <div
       class="border-t dark:border-gray-700/50 border-gray-300/50 pt-2 text-sm mt-auto p-2"
@@ -63,8 +65,8 @@
         </div>
         <span class="inline-flex flex-col text-start overflow-hidden">
           <span class="font-semibold text-black dark:text-white truncate"
-            >{{userDetails?.role === 'admin' || userDetails?.role === 'subadmin' ?
-      userDetails?.username : myPlan?.name ?? 'No Plan'}}</span
+            >{{userDetails?.role === 'admin' || userDetails?.role === 'subadmin'
+            ? userDetails?.username : myPlan?.name ?? 'No Plan'}}</span
           >
           <span class="text-xs text-muted-foreground truncate"
             >{{ userDetails?.email }}</span

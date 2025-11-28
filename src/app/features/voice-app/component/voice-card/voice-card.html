@@ -1,99 +1,113 @@
-<div hlmCard class="h-60 group">
+<div
+  hlmCard
+  class="group relative overflow-hidden rounded-lg bg-muted transition-all min-h-24 h-auto lg:h-60"
+>
   <div
-    class="h-full relative flex flex-col items-center justify-center rounded-lg bg-muted p-6"
-  >
-    <div
-      class="w-full h-full bg-muted/30 z-10 group-hover:block hidden absolute"
-    ></div>
-    <div class="flex w-full items-start justify-between">
-      <button
-        hlmBtn
-        variant="ghost"
-        class="absolute left-4 top-2 opacity-0 group-hover:lg:opacity-100 rounded-full text-accent-foreground/80 hover:bg-accent z-50"
-        (click)="copyId()"
-      >
-        ID
-      </button>
-      <div class="relative flex w-full justify-center">
-        <div class="group/avatar relative cursor-pointer">
-          <div class="relative">
-            <div
-              class="shrink-0 bg-accent rounded-[100%]"
-              style="
-                display: inline-block;
-                vertical-align: middle;
-                width: 60px;
-                height: 60px;
-                border-radius: 100%;
-                font-family: Helvetica, Arial, sans-serif;
-              "
-            >
-              <div
-                class="shrink-0 bg-accent rounded-[100%]"
-                [style]="`
-                    width: 60px;
-                    height: 60px;
-                    background:${gradient()};`
-                  "
-              ></div>
-            </div>
-            <div
-              class="absolute inset-0 hidden rounded-full bg-black/50 group-hover:block"
-            ></div>
-            <div
-              class="absolute inset-0 hidden rounded-full bg-black/30 group-hover/avatar:block"
-            ></div>
-          </div>
-          <button
-            class="absolute left-1/2 top-1/2 hidden size-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-transparent shadow-md group-hover:lg:flex sm:flex z-50"
-            title="Play"
-            (click)="playAudio.emit(voice)"
-          >
-            <ng-icon name="remixPlayLargeFill"></ng-icon>
-          </button>
-        </div>
-      </div>
-      <div class="absolute right-4 top-2 opacity-0 group-hover:lg:opacity-100">
-      <button
-        hlmBtn
-        variant="ghost"
-        class=" rounded-full text-accent-foreground/80 hover:bg-accent z-50"
-        (click)="isFavortieVoice() ? removeFavourite() : setFavourite()"
-      >
-        @if(isFavortieVoice()) {<ng-icon name="remixHeartFill"></ng-icon>}@else{
-        <ng-icon name="remixHeartLine"></ng-icon>}
-      </button>
-      @if(isCloining()) {
-      <button hlmBtn
-        variant="ghost"
-        class=" ml-2 rounded-full text-accent-foreground/80 hover:bg-accent z-50"
-        (click)="deleteVoice()"
+    class="absolute inset-0 z-0 hidden bg-muted/30 group-hover:block pointer-events-none"
+  ></div>
 
+  <div
+    class="relative z-10 flex h-full w-full flex-row items-center gap-3 p-4 pr-4 lg:flex-col lg:justify-center lg:p-6 lg:pr-6"
+  >
+    <div class="group/avatar relative shrink-0 cursor-pointer">
+      <div
+        class="relative overflow-hidden rounded-full bg-accent"
+        style="width: 50px; height: 50px"
+        [class.lg:w-[60px]]="true"
+        [class.lg:h-[60px]]="true"
       >
-        <ng-icon name="lucideTrash2"></ng-icon>
+        <div class="h-full w-full" [style.background]="gradient()"></div>
+        <div
+          class="absolute inset-0 hidden bg-black/30 group-hover/avatar:block lg:group-hover:block"
+        ></div>
+      </div>
+
+      <button
+        class="absolute left-1/2 top-1/2 flex size-8 lg:size-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-transparent shadow-sm transition-transform hover:scale-110 active:scale-95"
+        title="Play"
+        (click)="$event.stopPropagation(); playAudio.emit(voice)"
+      >
+        <ng-icon
+          name="remixPlayLargeFill"
+          class="text-foreground text-xl lg:text-2xl"
+        ></ng-icon>
       </button>
-    }
-      </div>
     </div>
-    <div class="mt-4 w-full truncate text-center text-base font-medium">
-      {{ voice().voicename }}
-    </div>
-    <div class="mt-3 w-full">
-      <div class="flex flex-nowrap items-end justify-center gap-1">
-        <span hlmBadge variant="secondary" class="capitalize"
-          >{{ language() }}</span
-        >
-        <span hlmBadge variant="secondary" class="capitalize"
-          >{{ voice().gender}}</span
-        >
-      </div>
-    </div>
-    <button
-      hlmBtn
-      class="absolute bottom-6 hidden group-hover:lg:flex z-20 sm-flex"
-      (click)="useVoice()"
+
+    <div
+      class="flex min-w-0 flex-1 flex-col items-start justify-center lg:w-full lg:items-center"
     >
-      Use this voice
-    </button>
+      <div
+        class="w-full truncate text-sm font-semibold lg:text-base lg:text-center lg:font-medium"
+      >
+        {{ voice().voicename }}
+      </div>
+      <div
+        class="mt-1 flex flex-wrap gap-1.5 lg:mt-2 lg:justify-center lg:gap-2"
+      >
+        <span
+          hlmBadge
+          variant="secondary"
+          class="capitalize px-1.5 py-0 text-[10px] lg:px-2 lg:py-0.5 lg:text-xs"
+        >
+          {{ language() }}
+        </span>
+        <span
+          hlmBadge
+          variant="secondary"
+          class="capitalize px-1.5 py-0 text-[10px] lg:px-2 lg:py-0.5 lg:text-xs"
+        >
+          {{ voice().gender }}
+        </span>
+      </div>
+    </div>
+
+    <div class="shrink-0 z-20 flex flex-col items-end gap-2">
+      <div class="flex gap-1">
+        <button
+          hlmBtn
+          variant="ghost"
+          size="icon"
+          class="h-8 w-8 rounded-full hover:bg-accent text-accent-foreground/80"
+          (click)="isFavortieVoice() ? removeFavourite() : setFavourite()"
+        >
+          @if(isFavortieVoice()) {
+          <ng-icon name="remixHeartFill" class="text-red-500"></ng-icon>
+          } @else {
+          <ng-icon name="remixHeartLine"></ng-icon>
+          }
+        </button>
+
+        @if(isCloining()) {
+        <button
+          hlmBtn
+          variant="ghost"
+          size="icon"
+          class="h-8 w-8 rounded-full hover:bg-accent text-accent-foreground/80"
+          (click)="deleteVoice()"
+        >
+          <ng-icon name="lucideTrash2"></ng-icon>
+        </button>
+        }
+      </div>
+
+      <button
+        hlmBtn
+        size="sm"
+        class="h-8 px-3 text-xs font-medium lg:h-10 lg:px-4 lg:text-sm"
+        (click)="useVoice()"
+      >
+        Use Voice
+      </button>
+    </div>
   </div>
+
+  <button
+    hlmBtn
+    variant="ghost"
+    class="absolute left-2 top-2 z-20 h-6 rounded-full px-2 text-[10px] opacity-0 transition-opacity hover:bg-accent group-hover:opacity-100 focus:opacity-100 lg:left-4 lg:h-8 lg:text-xs"
+    (click)="copyId()"
+  >
+    ID
+  </button>
 </div>

@@ -1,6 +1,4 @@
-<div
-  class="hidden h-full w-[21rem] shrink-0 grow-0 border-l border-border p-6 md:block"
->
+<ng-template #settingsContent>
   <div class="flex flex-col gap-6">
     <div class="flex flex-col gap-2">
       <label for="emotion">
@@ -180,4 +178,17 @@
       </hlm-select>
     </div>
   </div>
+</ng-template>
+
+<!-- Desktop sidebar (original) -->
+<div
+  *ngIf="!overlay"
+  class="hidden h-full w-[21rem] shrink-0 grow-0 border-l border-border p-6 md:block"
+>
+  <ng-container *ngTemplateOutlet="settingsContent"></ng-container>
+</div>
+
+<!-- Overlay / sheet content for mobile -->
+<div *ngIf="overlay" class="w-full max-w-full p-4 md:hidden">
+  <ng-container *ngTemplateOutlet="settingsContent"></ng-container>
 </div>

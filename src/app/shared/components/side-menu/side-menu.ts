@@ -102,6 +102,17 @@ export class SideMenu {
     element?.classList.remove('dark');
   };
 
+  // Delegated click handler for projected content. Only closes the sheet
+  // when a clicked element (or its ancestor) has the `data-close-sheet` attribute.
+  handleProjectedClick = (event: Event, ctx: any) => {
+    const target = event.target as HTMLElement | null;
+    if (!target) return;
+    const shouldClose = !!target.closest('[data-close-sheet]');
+    if (shouldClose) {
+      ctx?.close?.();
+    }
+  };
+
   darkMode = () => {
     const element = document.querySelector('html');
     element?.classList.add('dark');
