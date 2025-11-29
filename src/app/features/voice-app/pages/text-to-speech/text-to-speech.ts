@@ -14,19 +14,16 @@ import { Voices } from './tts-voices/tts-voices';
 import { IVoice } from '../../../../core/interfaces/voices.interface';
 import { TtsService } from '../../../../services/tts-service/tts-service';
 import { b64toBlob } from '../../../../shared/utils/base64-to-blob';
-import { saveAs } from 'file-saver';
 import { ActivatedRoute } from '@angular/router';
 import { VoicesService } from '../../../../services/voices-service/voices-service';
-import {
-  HlmSheet,
-  HlmSheetContent,
-} from '@spartan-ng/helm/sheet';
+import { HlmSheet, HlmSheetContent } from '@spartan-ng/helm/sheet';
 import { BrnSheetContent, BrnSheetTrigger } from '@spartan-ng/brain/sheet';
 import { SubscriptionsService } from '../../../../services/subscriptions-service/subscriptions-service';
 import { IPlan } from '../../../../core/interfaces/plan.interface';
 import { IMySubscription } from '../../../../core/interfaces/subscription.interface';
 import { UserService } from '../../../../services/user/user-service';
 import { DEMO_TEXT } from '../../constants/demo-text.constant';
+import { AudioWaveform } from '../../component/audio-waveform/audio-waveform';
 
 @Component({
   selector: 'app-text-to-speech',
@@ -42,8 +39,9 @@ import { DEMO_TEXT } from '../../constants/demo-text.constant';
     HlmSheet,
     HlmSheetContent,
     BrnSheetTrigger,
-    BrnSheetContent
-],
+    BrnSheetContent,
+    AudioWaveform,
+  ],
   templateUrl: './text-to-speech.html',
   styleUrl: './text-to-speech.css',
   providers: [
@@ -73,6 +71,7 @@ export class TextToSpeech implements OnInit {
 
   textareaMaxLength = 2000;
   user: any;
+  file = signal<File | null>(null);
 
   constructor(
     private aiManagementService: AiManagementService,
@@ -90,7 +89,7 @@ export class TextToSpeech implements OnInit {
         });
       }
     });
-    this.userService.UserDetails.subscribe((data) => this.user = data);
+    this.userService.UserDetails.subscribe((data) => (this.user = data));
     this.getAllPlans();
   }
 
@@ -118,9 +117,7 @@ export class TextToSpeech implements OnInit {
         this.ttsService
           .generateSpeechGoogle(requestPayload)
           .subscribe((response) => {
-            const audio = b64toBlob(response.audio_base64, 'audio/mpeg');
-            saveAs(audio, `${this.text.slice(0, 5) || 'output'}.mp3`);
-            this.getUserSubscription();
+            this.decodeAudioFile(response.audio_base64);
           });
 
         break;
@@ -137,9 +134,7 @@ export class TextToSpeech implements OnInit {
         this.ttsService
           .generateSpeechAzure(requestPayload)
           .subscribe((response) => {
-            const audio = b64toBlob(response.audio_base64, 'audio/mpeg');
-            saveAs(audio, `${this.text.slice(0, 5) || 'output'}.mp3`);
-            this.getUserSubscription();
+            this.decodeAudioFile(response.audio_base64);
           });
         break;
       }
@@ -156,9 +151,7 @@ export class TextToSpeech implements OnInit {
         this.ttsService
           .generateSpeechSpeechify(requestPayload)
           .subscribe((response) => {
-            const audio = b64toBlob(response.audio_base64, 'audio/mpeg');
-            saveAs(audio, `${this.text.slice(0, 5) || 'output'}.mp3`);
-            this.getUserSubscription();
+            this.decodeAudioFile(response.audio_base64);
           });
         break;
       }
@@ -174,9 +167,7 @@ export class TextToSpeech implements OnInit {
         this.ttsService
           .generateSpeechElevenLabs(requestPayload)
           .subscribe((response) => {
-            const audio = b64toBlob(response.base64, 'audio/mpeg');
-            saveAs(audio, `${this.text.slice(0, 5) || 'output'}.mp3`);
-            this.getUserSubscription();
+            this.decodeAudioFile(response.base64);
           });
         break;
       }
@@ -192,9 +183,7 @@ export class TextToSpeech implements OnInit {
         this.ttsService
           .generateSpeechLemonfox(requestPayload)
           .subscribe((response) => {
-            const audio = b64toBlob(response.audio_base64, 'audio/mpeg');
-            saveAs(audio, `${this.text.slice(0, 5) || 'output'}.mp3`);
-            this.getUserSubscription();
+            this.decodeAudioFile(response.audio_base64);
           });
         break;
       }
@@ -210,9 +199,7 @@ export class TextToSpeech implements OnInit {
         this.ttsService
           .generateSpeechGenAIPro(requestPayload)
           .subscribe((response) => {
-            const audio = b64toBlob(response.audio_base64, 'audio/mpeg');
-            saveAs(audio, `${this.text.slice(0, 5) || 'output'}.mp3`);
-            this.getUserSubscription();
+            this.decodeAudioFile(response.audio_base64);
           });
         break;
       }
@@ -231,11 +218,15 @@ export class TextToSpeech implements OnInit {
 
     let emotion: string = '';
 
-    if(this.emotion().toLowerCase() !== "none"){
-      emotion = `<speechify:style emotion="${this.emotion().toLowerCase()}">`
+    if (this.emotion().toLowerCase() !== 'none') {
+      emotion = `<speechify:style emotion="${this.emotion().toLowerCase()}">`;
     }
 
-    return `<speak><prosody pitch="${this.pitch()-50}%" rate="${this.speedRate()-50}%">${emotion}${escapeSSMLChars}${this.emotion().toLowerCase() !== 'none'? "</speechify:style>" : ''}</prosody></speak>`;
+    return `<speak><prosody pitch="${this.pitch() - 50}%" rate="${
+      this.speedRate() - 50
+    }%">${emotion}${escapeSSMLChars}${
+      this.emotion().toLowerCase() !== 'none' ? '</speechify:style>' : ''
+    }</prosody></speak>`;
   };
 
   getAllPlans() {
@@ -246,34 +237,33 @@ export class TextToSpeech implements OnInit {
   }
 
   getUserSubscription(findMyPlan?: boolean) {
-
-      this.subscriptionService
-        .checkUserSubscription()
-        .subscribe((res: IMySubscription) => {
-          this.userSubscription = res;
-          this.userService.UserSubscriptionData = res;
-          if (findMyPlan) {
-            this.selectedPlan = this.plans.find(
-              (plan: IPlan) => plan.id === this.userSubscription?.plan_id
-            );
-          }
-          if(res.plan_id === "admin_access"){
-              this.textareaMaxLength = 2000;
-          } else {
+    this.subscriptionService
+      .checkUserSubscription()
+      .subscribe((res: IMySubscription) => {
+        this.userSubscription = res;
+        this.userService.UserSubscriptionData = res;
+        if (findMyPlan) {
+          this.selectedPlan = this.plans.find(
+            (plan: IPlan) => plan.id === this.userSubscription?.plan_id
+          );
+        }
+        if (res.plan_id === 'admin_access') {
+          this.textareaMaxLength = 2000;
+        } else {
           this.textareaMaxLength =
-            ((this.userSubscription?.remainining_character_credits ?? 0) >
-              (this.selectedPlan?.default_character_limit ?? 0)
+            (this.userSubscription?.remainining_character_credits ?? 0) >
+            (this.selectedPlan?.default_character_limit ?? 0)
               ? this.selectedPlan?.default_character_limit ?? 0
-              : (this.userSubscription?.remainining_character_credits ?? 0) > 2000
-                ? 2000
-                : this.userSubscription?.remainining_character_credits ?? 0);
-              }
-        });
-
+              : (this.userSubscription?.remainining_character_credits ?? 0) >
+                2000
+              ? 2000
+              : this.userSubscription?.remainining_character_credits ?? 0;
+        }
+      });
   }
 
   setDemoText() {
-    const currentLang = this.selectedVoice()?.language_code.slice(0,2) || 'en';
+    const currentLang = this.selectedVoice()?.language_code.slice(0, 2) || 'en';
     const demoTexts = DEMO_TEXT[currentLang.toLowerCase()] || DEMO_TEXT['en'];
     const randomNumber = Math.floor(Math.random() * demoTexts.length);
     this.text = demoTexts[randomNumber];
@@ -281,5 +271,21 @@ export class TextToSpeech implements OnInit {
 
   clearText() {
     this.text = '';
+    this.file.set(null);
+  }
+
+  decodeAudioFile(input: string) {
+    const audio = b64toBlob(input, 'audio/mpeg');
+    const myFile = new File(
+      [audio],
+      `${this.text.slice(0, 5) || 'output'}.mp3`,
+      {
+        type: audio.type,
+        lastModified: new Date().getTime(), // Or a specific timestamp
+      }
+    );
+    this.file.set(myFile);
+    // saveAs(audio, `${this.text.slice(0, 5) || 'output'}.mp3`);
+    this.getUserSubscription();
   }
 }

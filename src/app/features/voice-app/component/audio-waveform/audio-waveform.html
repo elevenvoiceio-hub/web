@@ -1,0 +1,45 @@
+<div class="p-4 bg-input rounded-xl shadow-2xl">
+  <div
+    class="relative w-full h-20 bg-card rounded-lg border border-border shadow-inner overflow-hidden mb-6"
+  >
+    @if(audio.isLoading()){
+    <div class="text-center py-4 absolute inset-0">
+      <div
+        class="animate-spin rounded-full h-4 w-4 border-b-2 border-primary mx-auto"
+      ></div>
+      <p class="mt-2 text-primary">Decoding audio data...</p>
+    </div>
+    }
+    <canvas #uploadCanvas id="uploadCanvas" class="w-full h-full"></canvas>
+  </div>
+
+  @if(audio.uploadedAudioBuffer()){
+  <div class="flex gap-4 justify-center">
+    <button
+      hlmBtn
+      (click)="togglePlayback()"
+      [disabled]="audio.isLoading() || audio.isPlaybackActive('upload')"
+      variant="ghost"
+    >
+      <ng-icon name="remixPlayFill" class="w-8 h-8" />
+    </button>
+    <button
+      hlmBtn
+      variant="ghost"
+      (click)="togglePlayback()"
+      [disabled]="audio.isLoading() || !audio.isPlaybackActive('upload')"
+    >
+      <ng-icon name="lucidePauseCircle" class="w-8 h-8"></ng-icon>
+    </button>
+    <button
+      hlmBtn
+      variant="ghost"
+      (click)="downloadAudio(file())"
+      [disabled]="audio.isLoading()"
+    >
+      <ng-icon name="lucideDownload" class="w-8 h-8"></ng-icon>
+    </button>
+
+  </div>
+  }
+</div>

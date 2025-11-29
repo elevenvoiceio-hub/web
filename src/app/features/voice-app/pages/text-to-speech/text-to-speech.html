@@ -7,7 +7,7 @@
     <div class="flex h-full shrink grow flex-col min-h-0 min-w-0">
       <form
         action=""
-        class="flex h-full w-full shrink grow flex-col p-4 lg:max-h-140 lg:w-auto lg:p-6 min-w-0"
+        class="flex h-full w-full shrink grow flex-col p-4 lg:max-h-200 lg:w-auto lg:p-6 min-w-0"
       >
         <div class="shrink grow">
           <div class="relative flex size-full flex-col gap-2 min-h-0">
@@ -35,14 +35,14 @@
               </button>
 
               <div class="text-sm text-muted-foreground lg:text-base">
-                {{ text.length
-                }}/{{textareaMaxLength}}
-
+                {{ text.length }}/{{textareaMaxLength}}
               </div>
             </div>
           </div>
         </div>
-
+        @if(file()){
+        <app-audio-waveform class="mt-4" [file]="file()"/>
+        }
         <div
           class="mt-2 flex w-full shrink-0 grow-0 flex-row flex-nowrap justify-between gap-2 lg:mt-6 items-center"
         >
