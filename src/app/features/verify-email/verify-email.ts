@@ -10,21 +10,17 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { toast } from 'ngx-sonner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HlmInput } from '@spartan-ng/helm/input';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-verify-email',
-  imports: [
-    HlmToaster,
-    NgIcon,
-    HlmButton,
-    FormsModule,
-    HlmInput,
-  ],
+  imports: [HlmToaster, NgIcon, HlmButton, FormsModule, HlmInput],
   templateUrl: './verify-email.html',
   styleUrl: './verify-email.css',
   providers: [provideIcons({ lucideAudioLines })],
 })
 export class VerifyEmail {
+  applicationName = environment.applicationName;
   otp = '';
   email = '';
 

@@ -12,6 +12,7 @@ import { lucideAudioLines, lucideEye, lucideEyeOff } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { ForgotPasswordService } from '../../services/forgot-password-service/forgot-password-service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-forgot-password',
@@ -21,6 +22,7 @@ import { ForgotPasswordService } from '../../services/forgot-password-service/fo
   viewProviders: [provideIcons({ lucideAudioLines, lucideEye, lucideEyeOff })],
 })
 export class ForgotPassword {
+  applicationName = environment.applicationName;
   showPassword = false;
 
   forgotPasswordForm = new FormGroup({

@@ -38,6 +38,7 @@ import { IUser } from '../../../core/interfaces/user.interface';
 import { SubscriptionsService } from '../../../services/subscriptions-service/subscriptions-service';
 import { forkJoin } from 'rxjs';
 import { IPlan } from '../../../core/interfaces/plan.interface';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-side-menu',
@@ -82,6 +83,7 @@ import { IPlan } from '../../../core/interfaces/plan.interface';
   ],
 })
 export class SideMenu {
+  applicationName = environment.applicationName;
   userDetails: IUser | null = null;
   subscriptionData: IMySubscription | null = null;
   myPlan: IPlan | undefined;
@@ -96,9 +98,11 @@ export class SideMenu {
       this.setUserData(data);
     });
 
-    this.userService.UserSubscription.subscribe((data: IMySubscription | null) => {
-      this.setSubscriptionData(data);
-    });
+    this.userService.UserSubscription.subscribe(
+      (data: IMySubscription | null) => {
+        this.setSubscriptionData(data);
+      }
+    );
   }
 
   lightMode = () => {

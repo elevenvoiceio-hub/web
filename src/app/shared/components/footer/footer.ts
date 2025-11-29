@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideAudioLines, lucideInstagram } from '@ng-icons/lucide';
 import { remixWechatLine, remixWhatsappLine } from '@ng-icons/remixicon';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-footer',
@@ -18,4 +19,6 @@ import { remixWechatLine, remixWhatsappLine } from '@ng-icons/remixicon';
     }),
   ],
 })
-export class Footer {}
+export class Footer {
+  applicationName = environment.applicationName;
+}

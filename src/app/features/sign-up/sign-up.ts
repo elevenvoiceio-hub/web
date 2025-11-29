@@ -14,21 +14,17 @@ import { IUserRegister } from '../../core/interfaces/user.interface';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { CommonService } from '../../services/common-service/common-service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-sign-up',
-  imports: [
-    NgIcon,
-    RouterModule,
-    HlmButton,
-    ReactiveFormsModule,
-    HlmInput,
-  ],
+  imports: [NgIcon, RouterModule, HlmButton, ReactiveFormsModule, HlmInput],
   templateUrl: './sign-up.html',
   styleUrl: './sign-up.css',
   providers: [provideIcons({ lucideAudioLines, lucideEye, lucideEyeOff })],
 })
 export class SignUp {
+  applicationName = environment.applicationName;
   showPassword = false;
   showRePassword = false;
 

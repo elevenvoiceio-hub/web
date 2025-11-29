@@ -1,7 +1,12 @@
 import { ForgotPassword } from './../forgot-password/forgot-password';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideAudioLines, lucideEye, lucideEyeOff } from '@ng-icons/lucide';
@@ -12,26 +17,28 @@ import { CommonService } from '../../services/common-service/common-service';
 import { UserService } from '../../services/user/user-service';
 import { ForgotPasswordService } from '../../services/forgot-password-service/forgot-password-service';
 import { HlmLabel } from '@spartan-ng/helm/label';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-reset-password',
-  imports: [NgIcon,
+  imports: [
+    NgIcon,
     RouterModule,
     HlmButton,
     ReactiveFormsModule,
     HlmInput,
-    HlmLabel
+    HlmLabel,
   ],
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.css',
-   providers: [provideIcons({ lucideAudioLines, lucideEye, lucideEyeOff })],
+  providers: [provideIcons({ lucideAudioLines, lucideEye, lucideEyeOff })],
 })
 export class ResetPassword {
-showPassword = false;
+  applicationName = environment.applicationName;
+  showPassword = false;
   showRePassword = false;
 
   resetPasswordForm = new FormGroup({
-
     email: new FormControl('', [Validators.required, Validators.email]),
     new_password: new FormControl('', [
       Validators.required,
@@ -55,7 +62,7 @@ showPassword = false;
     this.activatedRoute.queryParams.subscribe((params) => {
       this.email = params['email'];
       this.resetPasswordForm.patchValue({ email: this.email });
-    })
+    });
   }
 
   onSubmit = () => {
@@ -72,16 +79,16 @@ showPassword = false;
     });
   };
 
-  resendOTP(){
+  resendOTP() {
     this.forgotPasswordService
-    .resendOTP(this.resetPasswordForm.value)
-    .subscribe({
-      next: () => {
-        this.commonService.setToaster('OTP sent successfully');
-      },
-      error: (error) => {
-        this.commonService.setToaster(error.error.error);
-      },
-    });
+      .resendOTP(this.resetPasswordForm.value)
+      .subscribe({
+        next: () => {
+          this.commonService.setToaster('OTP sent successfully');
+        },
+        error: (error) => {
+          this.commonService.setToaster(error.error.error);
+        },
+      });
   }
 }

@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideAudioLines } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-headers',
@@ -11,4 +12,6 @@ import { HlmButton } from '@spartan-ng/helm/button';
   styleUrl: './headers.css',
   providers: [provideIcons({ lucideAudioLines })],
 })
-export class Headers {}
+export class Headers {
+  applicationName = environment.applicationName;
+}

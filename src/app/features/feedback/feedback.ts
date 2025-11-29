@@ -13,10 +13,10 @@ import { HlmInput } from '@spartan-ng/helm/input';
 import { ISelectOption } from '../../core/interfaces/select.interface';
 import { FeedbackService } from '../../services/feedback-service/feedback-service';
 import { CommonService } from '../../services/common-service/common-service';
-import { HlmSelect, HlmSelectImports } from '@spartan-ng/helm/select';
+import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { BrnSelectImports } from '@spartan-ng/brain/select';
-import { BrnLabel } from "@spartan-ng/brain/label";
 import { lucideAudioLines } from '@ng-icons/lucide';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-feedback',
@@ -34,6 +34,7 @@ import { lucideAudioLines } from '@ng-icons/lucide';
   viewProviders: [provideIcons({lucideAudioLines})],
 })
 export class Feedback {
+  applicationName = environment.applicationName;
   feedbackForm = new FormGroup({
     category: new FormControl('', Validators.required),
     priority: new FormControl('', Validators.required),

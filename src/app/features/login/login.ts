@@ -13,6 +13,7 @@ import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { UserService } from '../../services/user/user-service';
 import { LocalStorageService } from '../../services/local-storage-service/local-storage-service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   imports: [NgIcon, RouterModule, HlmButton, ReactiveFormsModule, HlmInput],
@@ -24,6 +25,7 @@ import { LocalStorageService } from '../../services/local-storage-service/local-
   ],
 })
 export class Login {
+  applicationName = environment.applicationName;
   showPassword = false;
 
   loginForm = new FormGroup({
