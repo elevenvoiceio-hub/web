@@ -39,8 +39,6 @@ export class TtsSettings {
   speedRate = model<number>(50);
   model = model();
 
-  overlay = input<boolean>(false);
-
   updatePitch = ($event: Event) => {
     const value = Number((<HTMLInputElement>$event.target).value);
     this.pitch.set(value + 50);

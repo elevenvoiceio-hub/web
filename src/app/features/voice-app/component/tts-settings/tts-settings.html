@@ -180,17 +180,8 @@
   </div>
 </ng-template>
 
-<!-- Desktop sidebar (original) -->
-@if(overlay()){
-<div class="w-full max-w-full p-4 lg:hidden">
-  <ng-container *ngTemplateOutlet="settingsContent"></ng-container>
-</div>
-} @else {
 <div
-  class="hidden h-full w-84 shrink-0 grow-0 border-l border-border p-6 lg:block"
+  class="w-full max-w-full p-4 lg:h-full lg:w-84 lg:shrink-0 lg:grow-0 lg:border-l lg:border-border lg:p-6 lg:block"
 >
   <ng-container *ngTemplateOutlet="settingsContent"></ng-container>
 </div>
-}
-
-<!-- Overlay / sheet content for mobile -->
