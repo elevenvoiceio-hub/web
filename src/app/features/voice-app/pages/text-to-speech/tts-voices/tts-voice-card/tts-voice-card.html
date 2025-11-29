@@ -1,4 +1,4 @@
-<div class="w-full cursor-pointer" style="height: 80px" (click)="selectVoice()">
+<div class="w-full cursor-pointer" style="height: 80px" >
   <div
     [class]="`relative flex items-center gap-2 rounded-sm px-2 text-sm outline-hidden select-none  py-4 justify-between ${selected() ? 'text-accent-foreground bg-primary/10' : ''} ${disabled() ? 'opacity-50 pointer-events-none' : ''}  hover:bg-primary/10`"
     data-slot="command-item"
@@ -8,7 +8,7 @@
     <div
       class="flex w-full select-none flex-nowrap items-center justify-center gap-4 p-1 text-sm"
     >
-      <div class="flex items-center justify-center gap-4">
+      <div class="flex items-center gap-4 w-full" (click)="selectVoice()">
         <div class="flex flex-col gap-1">
           <div class="flex items-center gap-2">
             <div class="truncate text-base">{{ voice()?.voicename }}</div>
@@ -39,6 +39,7 @@
         class="cursor-pointer gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 text-primary-foreground hover:bg-primary/90 px-4 py-2 ml-auto flex size-10 shrink-0 items-center justify-center rounded-full bg-white shadow-md [&amp;_svg]:size-3"
         type="button"
         title="Play"
+        (click)="emitPlayAudio()"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

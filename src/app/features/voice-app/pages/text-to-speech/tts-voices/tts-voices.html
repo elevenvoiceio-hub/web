@@ -84,13 +84,10 @@
         </hlm-tabs-list>
         <div hlmTabsContent="all">
           @if(tab === 'all'){
-          <div
-            class="overflow-y-auto"
-            style="height: calc(75vh - 14rem)"
-          >
+          <div class="overflow-y-auto" style="height: calc(75vh - 18rem)">
             @if(filterLanguage?.length > 0){ @for(country of filterLanguage;
             track country.locale) { @if(country.locale === language()?.code ||
-    !language()?.code || language()?.code === 'All'){
+            !language()?.code || language()?.code === 'All'){
 
             <div class="w-full col-span-full">
               <div
@@ -111,6 +108,7 @@
               [voice]="voice"
               [selected]="selectedVoice()?.voice_id === voice.voice_id"
               (selectVoiceEvent)="voiceSelection(voice)"
+              (playaudio)="playAudioEvent(voice.sample_url || '')"
             />} } } }}@else {
             <div class="text-muted-foreground">No Voices Found</div>
             }
@@ -125,7 +123,9 @@
             style="height: calc(75vh - 14rem)"
           >
             @if(filterLanguageCloning?.length > 0){ @for(country of
-            filterLanguageCloning; track country.locale) {
+            filterLanguageCloning; track country.locale) {@if(country.locale ===
+            language()?.code || !language()?.code || language()?.code ===
+            'All'){
 
             <div class="w-full col-span-full">
               <div
@@ -146,8 +146,8 @@
               [voice]="voice"
               [selected]="selectedVoice()?.voice_id === voice.voice_id"
               (selectVoiceEvent)="voiceSelection(voice)"
-            />
-            } } }}@else {
+              (playaudio)="playAudioEvent(voice.sample_url || '')"
+            />} } } }}@else {
             <div class="text-muted-foreground">No Voices Found</div>
             }
           </div>
@@ -160,7 +160,8 @@
             style="height: calc(75vh - 14rem)"
           >
             @if(favVoiceIds.length > 0){ @for(country of filteredVocies; track
-            country.locale) {
+            country.locale) {@if(country.locale === language()?.code ||
+            !language()?.code || language()?.code === 'All'){
 
             <div class="w-full col-span-full">
               <div
@@ -181,8 +182,8 @@
               [voice]="voice"
               [selected]="selectedVoice()?.voice_id === voice.voice_id"
               (selectVoiceEvent)="voiceSelection(voice)"
-            />
-            } } }}@else {
+              (playaudio)="playAudioEvent(voice.sample_url || '')"
+            />} } } }}@else {
             <div class="text-muted-foreground">No Voices Found</div>
             }
           </div>

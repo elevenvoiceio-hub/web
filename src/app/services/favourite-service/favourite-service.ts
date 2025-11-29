@@ -21,6 +21,6 @@ export class FavouriteService {
   }
 
   removeFavourite(voiceId: string) {
-    return this.http.delete(this.baseUrl + `remove-favorite-voice/${voiceId}`);
+    return this.http.delete(this.baseUrl + `remove-favorite-voice/${voiceId}/`);
   }
 }

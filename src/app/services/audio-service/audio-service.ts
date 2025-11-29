@@ -176,7 +176,6 @@ export class AudioService {
 
   togglePlayback(buffer: AudioBuffer | null, canvasId: string) {
     const isActive = this.playbackCanvasId() === canvasId;
-    console.log('Toggling playback. Is active:', isActive);
     if (buffer) {
       if (isActive) this.stopPlayback();
       else this.startPlayback(buffer, canvasId);

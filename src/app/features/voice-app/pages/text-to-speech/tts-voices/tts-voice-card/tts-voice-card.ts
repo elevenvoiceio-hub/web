@@ -12,6 +12,7 @@ export class TtsVoiceCard {
   selected = input<boolean>(false);
   disabled = input<boolean>();
   selectVoiceEvent = output<IVoice>();
+  playaudio = output<void>();
 
   copyId = () => {
     navigator.clipboard.writeText(this.voice()?.['voice_id'] ?? '');
@@ -24,4 +25,8 @@ export class TtsVoiceCard {
 
     this.selectVoiceEvent.emit(this.voice()!);
   };
+
+  emitPlayAudio = () => {
+    this.playaudio.emit();
+  }
 }

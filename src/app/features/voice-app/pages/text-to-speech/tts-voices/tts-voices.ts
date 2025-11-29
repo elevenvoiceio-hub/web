@@ -23,6 +23,7 @@ import { VoicesService } from '../../../../../services/voices-service/voices-ser
 import {
   Component,
   model,
+  OnDestroy,
   OnInit,
   output,
   signal,
@@ -71,7 +72,9 @@ import { HlmSelectImports } from '@spartan-ng/helm/select';
   styleUrl: './tts-voices.css',
   viewProviders: [provideIcons({ lucideChevronDown, lucideSearch })],
 })
-export class Voices implements OnInit {
+export class Voices implements OnInit, OnDestroy {
+  private currentAudio: HTMLAudioElement | null = null;
+
   voices: IVoice[] = [];
   selectedVoice = model<IVoice | null>(null);
   searchText = '';
@@ -159,7 +162,8 @@ export class Voices implements OnInit {
         .includes(this.searchText?.toLowerCase()) ||
         this.searchText === '' ||
         !this.searchText) &&
-      (this.gender() === 'Any' || voice?.['gender'].toLowerCase() === this.gender().toLowerCase())
+      (this.gender() === 'Any' ||
+        voice?.['gender'].toLowerCase() === this.gender().toLowerCase())
     );
   };
 
@@ -229,4 +233,23 @@ export class Voices implements OnInit {
     });
     this.languages = languageArray;
   };
+
+  playAudioEvent(audioSrc: string): void {
+    // Pause any currently playing audio
+    if (this.currentAudio && !this.currentAudio.paused) {
+      this.currentAudio.pause();
+    }
+
+    // Create and play the new audio
+    this.currentAudio = new Audio(audioSrc);
+    this.currentAudio.load(); // Optional: Preload the audio
+    this.currentAudio.play();
+  }
+
+  ngOnDestroy(): void {
+    if (this.currentAudio) {
+      this.currentAudio.pause();
+      this.currentAudio = null;
+    }
+  }
 }
