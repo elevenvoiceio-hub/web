@@ -22,3 +22,7 @@ export interface IElevenLabsResponse {
   base64: string;
   filename: string;
 }
+
+export interface IGenAIProResponse {
+  task_id: string;
+}

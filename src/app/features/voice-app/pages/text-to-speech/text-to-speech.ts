@@ -24,6 +24,11 @@ import { IMySubscription } from '../../../../core/interfaces/subscription.interf
 import { UserService } from '../../../../services/user/user-service';
 import { DEMO_TEXT } from '../../constants/demo-text.constant';
 import { AudioWaveform } from '../../component/audio-waveform/audio-waveform';
+import { IGenAIProResponse } from '../../../../core/interfaces/tts-response.interface';
+import { CommonService } from '../../../../services/common-service/common-service';
+import { mapRange } from '../../../../shared/utils/map-range,utils';
+import { getFileNameFromUrl } from '../../../../shared/utils/file-name-extractor.utils';
+import saveAs from 'file-saver';
 
 @Component({
   selector: 'app-text-to-speech',
@@ -79,7 +84,8 @@ export class TextToSpeech implements OnInit {
     private activatedRoutes: ActivatedRoute,
     private voicesService: VoicesService,
     private subscriptionService: SubscriptionsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly commonService: CommonService
   ) {
     this.activatedRoutes.params.subscribe((params) => {
       const voiceId = params['voiceId'];
@@ -114,11 +120,14 @@ export class TextToSpeech implements OnInit {
           speaking_rate: this.speedRate(),
           pitch: this.pitch(),
         };
-        this.ttsService
-          .generateSpeechGoogle(requestPayload)
-          .subscribe((response) => {
+        this.ttsService.generateSpeechGoogle(requestPayload).subscribe({
+          next: (response) => {
             this.decodeAudioFile(response.audio_base64);
-          });
+          },
+          error: () => {
+            this.commonService.setToaster('Error generating speech');
+          },
+        });
 
         break;
       }
@@ -131,11 +140,14 @@ export class TextToSpeech implements OnInit {
           emotion: this.emotion(),
           voice_name: this.selectedVoice()?.voice_id,
         };
-        this.ttsService
-          .generateSpeechAzure(requestPayload)
-          .subscribe((response) => {
+        this.ttsService.generateSpeechAzure(requestPayload).subscribe({
+          next: (response) => {
             this.decodeAudioFile(response.audio_base64);
-          });
+          },
+          error: () => {
+            this.commonService.setToaster('Error generating speech');
+          },
+        });
         break;
       }
       case 'speechify': {
@@ -148,11 +160,14 @@ export class TextToSpeech implements OnInit {
           voice_id: this.selectedVoice()?.voice_id,
         };
 
-        this.ttsService
-          .generateSpeechSpeechify(requestPayload)
-          .subscribe((response) => {
+        this.ttsService.generateSpeechSpeechify(requestPayload).subscribe({
+          next: (response) => {
             this.decodeAudioFile(response.audio_base64);
-          });
+          },
+          error: () => {
+            this.commonService.setToaster('Error generating speech');
+          },
+        });
         break;
       }
       case 'elevenlabs': {
@@ -164,11 +179,14 @@ export class TextToSpeech implements OnInit {
           emotion: this.emotion(),
           voice_id: this.selectedVoice()?.voice_id,
         };
-        this.ttsService
-          .generateSpeechElevenLabs(requestPayload)
-          .subscribe((response) => {
+        this.ttsService.generateSpeechElevenLabs(requestPayload).subscribe({
+          next: (response) => {
             this.decodeAudioFile(response.base64);
-          });
+          },
+          error: () => {
+            this.commonService.setToaster('Error generating speech');
+          },
+        });
         break;
       }
       case 'lemonfox': {
@@ -180,33 +198,81 @@ export class TextToSpeech implements OnInit {
           emotion: this.emotion(),
           voice: this.selectedVoice()?.voice_id,
         };
-        this.ttsService
-          .generateSpeechLemonfox(requestPayload)
-          .subscribe((response) => {
+        this.ttsService.generateSpeechLemonfox(requestPayload).subscribe({
+          next: (response) => {
             this.decodeAudioFile(response.audio_base64);
-          });
+          },
+          error: () => {
+            this.commonService.setToaster('Error generating speech');
+          },
+        });
         break;
       }
       case 'labs': {
         const requestPayload = {
-          text: this.text,
-          pitch: this.pitch(),
-          speedRate: this.speedRate(),
-          textNormalization: this.textNormalization(),
-          emotion: this.emotion(),
+          input: this.text,
           voice_id: this.selectedVoice()?.voice_id,
+          model_id: 'eleven_multilingual_v2',
+          speed: mapRange(this.speedRate(), 0, 100, 0.7, 1.2),
         };
-        this.ttsService
-          .generateSpeechGenAIPro(requestPayload)
-          .subscribe((response) => {
-            this.decodeAudioFile(response.audio_base64);
-          });
+        this.ttsService.generateSpeechGenAIPro(requestPayload).subscribe({
+          next: (response) => {
+            this.generateGenAIProVoice(response);
+            this.commonService.setLoader(true);
+          },
+          error: () => {
+            this.commonService.setToaster('Error generating speech');
+          },
+        });
         break;
       }
       default:
         break;
     }
   };
+
+  generateGenAIProVoice(input: IGenAIProResponse) {
+    const taskId = input.task_id;
+    const taskTimer = setInterval(() => {
+      this.ttsService.getGenAIProTaskStatus(taskId).subscribe({
+        next: (res: any) => {
+          if (res.status === 'completed') {
+            clearInterval(taskTimer);
+            this.getAudioFile(res.result);
+            this.decodeAudioFile(res.audio_base64);
+          } else if (res.status === 'failed') {
+            clearInterval(taskTimer);
+          } else {
+            this.commonService.setLoader(true);
+          }
+        },
+        error: () => {
+          clearInterval(taskTimer);
+          this.commonService.setToaster('Error generating speech');
+        },
+      });
+    }, 10000);
+  }
+
+  getAudioFile(url: string) {
+    this.ttsService.getaudiofile(url).subscribe({
+      next: (res: Blob) => {
+        const myFile = new File([
+          res],
+          getFileNameFromUrl(url),
+          {
+            type: 'audio/mpeg',
+            lastModified: new Date().getTime(), // Or a specific timestamp
+          }
+        );
+        this.file.set(myFile);
+        this.getUserSubscription();
+      },
+      error: () => {
+        this.commonService.setToaster('Error generating speech');
+      },
+    });
+  }
 
   formatTextForSpeechify = (inputText: string) => {
     const escapeSSMLChars = inputText

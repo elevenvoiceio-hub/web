@@ -139,6 +139,10 @@ export const LOCALE = {
     language: 'Arabic',
     country: 'Tunisia',
   },
+  'ar-US':{
+    language: 'Arabic',
+    country: 'United States',
+  },
   'ar-YE': {
     language: 'Arabic',
     country: 'Yemen',

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpBackend } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
@@ -6,6 +6,7 @@ import {
   IAzureResponse,
   IElevenLabsResponse,
   IGcpResponse,
+  IGenAIProResponse,
   ISpeechifyResponse,
 } from '../../core/interfaces/tts-response.interface';
 
@@ -15,7 +16,14 @@ import {
 export class TtsService {
   baseUrl = environment.baseUrl + '/tts/';
 
-  constructor(private readonly http: HttpClient) {}
+  private readonly httpWithoutInterceptor: HttpClient;
+
+  constructor(
+    private readonly http: HttpClient,
+    private readonly handler: HttpBackend
+  ) {
+    this.httpWithoutInterceptor = new HttpClient(handler);
+  }
 
   generateSpeechAzure(data: any): Observable<IAzureResponse> {
     return this.http.post<IAzureResponse>(`${this.baseUrl}azure/`, data);
@@ -43,7 +51,15 @@ export class TtsService {
     return this.http.post<any>(`${this.baseUrl}lemonfox/`, data);
   }
 
-  generateSpeechGenAIPro(data: any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}genaipro/`, data);
+  generateSpeechGenAIPro(data: any): Observable<IGenAIProResponse> {
+    return this.http.post<any>(`${this.baseUrl}labs/tts/`, data);
+  }
+
+  getGenAIProTaskStatus(taskId: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}labs/task/${taskId}`);
+  }
+
+  getaudiofile(url: string): Observable<Blob> {
+    return this.httpWithoutInterceptor.get(url, { responseType: 'blob' });
   }
 }
