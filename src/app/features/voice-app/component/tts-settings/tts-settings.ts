@@ -1,5 +1,5 @@
-import { Component, input, model, signal } from '@angular/core';
-import { CommonModule, NgIf, NgTemplateOutlet } from '@angular/common';
+import { Component, input, model } from '@angular/core';
+import { CommonModule, NgTemplateOutlet } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideInfo } from '@ng-icons/lucide';
 import { HlmTooltip, HlmTooltipTrigger } from '@spartan-ng/helm/tooltip';
@@ -14,7 +14,6 @@ import { HlmBadge } from '@spartan-ng/helm/badge';
   selector: 'app-tts-settings',
   imports: [
     CommonModule,
-    NgIf,
     NgTemplateOutlet,
     HlmTooltip,
     HlmTooltipTrigger,
