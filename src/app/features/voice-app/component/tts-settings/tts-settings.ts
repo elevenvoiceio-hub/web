@@ -1,10 +1,8 @@
 import { Component, input, model, signal } from '@angular/core';
+import { CommonModule, NgIf, NgTemplateOutlet } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideInfo } from '@ng-icons/lucide';
-import {
-  HlmTooltip,
-  HlmTooltipTrigger,
-} from '@spartan-ng/helm/tooltip';
+import { HlmTooltip, HlmTooltipTrigger } from '@spartan-ng/helm/tooltip';
 import { BrnTooltipContentTemplate } from '@spartan-ng/brain/tooltip';
 import { BrnSelectImports } from '@spartan-ng/brain/select';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
@@ -15,6 +13,9 @@ import { HlmBadge } from '@spartan-ng/helm/badge';
 @Component({
   selector: 'app-tts-settings',
   imports: [
+    CommonModule,
+    NgIf,
+    NgTemplateOutlet,
     HlmTooltip,
     HlmTooltipTrigger,
     BrnTooltipContentTemplate,
