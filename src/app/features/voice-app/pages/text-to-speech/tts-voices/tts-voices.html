@@ -28,6 +28,50 @@
           />
         </div>
       </div>
+      <div class="flex h-12 w-full items-center gap-2">
+        <hlm-select
+          class="inline-block w-full"
+          placeholder="Language"
+          [(value)]="language"
+          scrollable="true"
+          id="language"
+        >
+          <hlm-select-trigger class="w-full">
+            <hlm-select-value>
+              <span class="w-full" *brnSelectValue="let value">
+                {{ value.name }} {{value.country? `(${value.country}) `: ''}}
+              </span>
+            </hlm-select-value>
+          </hlm-select-trigger>
+          <hlm-select-content class="max-h-92">
+            <hlm-select-scroll-up />
+            @for(language of languages; track language){
+            <hlm-option [value]="language"
+              >{{ language.name }} {{language.country? `(${language.country}) `:
+              ''}}</hlm-option
+            >
+            }
+            <hlm-select-scroll-down />
+          </hlm-select-content>
+        </hlm-select>
+        <hlm-select
+          class="inline-block w-full"
+          placeholder="Gender"
+          [(value)]="gender"
+          scrollable="true"
+          id="gender"
+        >
+          <hlm-select-trigger class="w-full">
+            <hlm-select-value />
+          </hlm-select-trigger>
+          <hlm-select-content class="max-h-92">
+            <hlm-select-scroll-up />
+            @for(gender of genders; track gender){
+            <hlm-option [value]="gender">{{ gender }}</hlm-option> }
+            <hlm-select-scroll-down />
+          </hlm-select-content>
+        </hlm-select>
+      </div>
       <hlm-tabs tab="all" class="w-full">
         <hlm-tabs-list aria-label="tabs example">
           <button hlmTabsTrigger="all" (click)="tab = 'all'">All</button>
@@ -41,11 +85,47 @@
         <div hlmTabsContent="all">
           @if(tab === 'all'){
           <div
-            class="grid grid-cols-1 overflow-y-auto"
+            class="overflow-y-auto"
             style="height: calc(75vh - 14rem)"
           >
             @if(filterLanguage?.length > 0){ @for(country of filterLanguage;
-            track country.locale) {
+            track country.locale) { @if(country.locale === language()?.code ||
+    !language()?.code || language()?.code === 'All'){
+
+            <div class="w-full col-span-full">
+              <div
+                class="flex items-center bg-background p-4 text-sm font-medium text-muted-foreground"
+              >
+                <span
+                  [class]="`fi fi-${country.locale?.split('-')?.[1]?.toLowerCase()} mr-2`"
+                ></span>
+                <p class="inline-block">
+                  {{ country.country }} · {{ country.language }}
+                </p>
+              </div>
+            </div>
+
+            @for(voice of country.voices; track voice.id) {
+            @if(showVoice(voice)){
+            <app-tts-voice-card
+              [voice]="voice"
+              [selected]="selectedVoice()?.voice_id === voice.voice_id"
+              (selectVoiceEvent)="voiceSelection(voice)"
+            />} } } }}@else {
+            <div class="text-muted-foreground">No Voices Found</div>
+            }
+          </div>
+
+          }
+        </div>
+        <div hlmTabsContent="cloned">
+          @if(tab === 'cloned'){
+          <div
+            class="grid grid-cols-1 overflow-y-auto"
+            style="height: calc(75vh - 14rem)"
+          >
+            @if(filterLanguageCloning?.length > 0){ @for(country of
+            filterLanguageCloning; track country.locale) {
 
             <div class="w-full col-span-full">
               <div
@@ -71,16 +151,16 @@
             <div class="text-muted-foreground">No Voices Found</div>
             }
           </div>
-
           }
         </div>
-        <div hlmTabsContent="cloned">@if(tab === 'cloned'){
+        <div hlmTabsContent="favorite">
+          @if(tab === 'favorite'){
           <div
             class="grid grid-cols-1 overflow-y-auto"
             style="height: calc(75vh - 14rem)"
           >
-            @if(filterLanguageCloning?.length > 0){ @for(country of filterLanguageCloning;
-            track country.locale) {
+            @if(favVoiceIds.length > 0){ @for(country of filteredVocies; track
+            country.locale) {
 
             <div class="w-full col-span-full">
               <div
@@ -105,39 +185,9 @@
             } } }}@else {
             <div class="text-muted-foreground">No Voices Found</div>
             }
-          </div>}</div>
-        <div hlmTabsContent="favorite">@if(tab === 'favorite'){
-          <div
-            class="grid grid-cols-1 overflow-y-auto"
-            style="height: calc(75vh - 14rem)"
-          >
-            @if(favVoiceIds.length > 0){ @for(country of filteredVocies;
-            track country.locale) {
-
-            <div class="w-full col-span-full">
-              <div
-                class="flex items-center bg-background p-4 text-sm font-medium text-muted-foreground"
-              >
-                <span
-                  [class]="`fi fi-${country.locale?.split('-')?.[1]?.toLowerCase()} mr-2`"
-                ></span>
-                <p class="inline-block">
-                  {{ country.country }} · {{ country.language }}
-                </p>
-              </div>
-            </div>
-
-            @for(voice of country.voices; track voice.id) {
-            @if(showVoice(voice)){
-            <app-tts-voice-card
-              [voice]="voice"
-              [selected]="selectedVoice()?.voice_id === voice.voice_id"
-              (selectVoiceEvent)="voiceSelection(voice)"
-            />
-            } } }}@else {
-            <div class="text-muted-foreground">No Voices Found</div>
-            }
-          </div> }</div>
+          </div>
+          }
+        </div>
       </hlm-tabs>
     </div>
   </hlm-dialog-content>

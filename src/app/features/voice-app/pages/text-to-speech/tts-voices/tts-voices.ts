@@ -20,7 +20,14 @@ import {
   HlmTabsTrigger,
 } from '@spartan-ng/helm/tabs';
 import { VoicesService } from '../../../../../services/voices-service/voices-service';
-import { Component, model, OnInit, output, viewChild } from '@angular/core';
+import {
+  Component,
+  model,
+  OnInit,
+  output,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { Location } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown, lucideSearch } from '@ng-icons/lucide';
@@ -35,6 +42,8 @@ import { VoiceCloningService } from '../../../../../services/voice-cloning/voice
 import { forkJoin } from 'rxjs';
 import { IFavorite } from '../../../../../core/interfaces/favorites.interface';
 import { IClonedVoices } from '../../../../../core/interfaces/cloned.interface';
+import { BrnSelectImports } from '@spartan-ng/brain/select';
+import { HlmSelectImports } from '@spartan-ng/helm/select';
 
 @Component({
   selector: 'app-tts-voices',
@@ -55,6 +64,8 @@ import { IClonedVoices } from '../../../../../core/interfaces/cloned.interface';
     HlmTabsList,
     HlmTabsTrigger,
     TtsVoiceCard,
+    BrnSelectImports,
+    HlmSelectImports,
   ],
   templateUrl: './tts-voices.html',
   styleUrl: './tts-voices.css',
@@ -74,6 +85,12 @@ export class Voices implements OnInit {
   favVoiceIds: number[] = [];
   filteredVocies: any;
 
+  languages: any[] = [];
+  genders = ['Any', 'Male', 'Female'];
+
+  language = signal<any>(null);
+  gender = signal('Any');
+
   constructor(
     private voicesService: VoicesService,
     private clonedVoiceService: VoiceCloningService,
@@ -89,12 +106,12 @@ export class Voices implements OnInit {
     forkJoin({
       voices: this.voicesService.getVoices(),
       favorites: this.favouriteService.getFavourites(),
-      cloned: this.clonedVoiceService.getClonedVoices()
+      cloned: this.clonedVoiceService.getClonedVoices(),
     }).subscribe(
       ({
         voices,
         favorites,
-        cloned
+        cloned,
       }: {
         voices: IVoice[];
         favorites: IFavorite;
@@ -117,12 +134,14 @@ export class Voices implements OnInit {
             model: voice.voice_cloning_model,
           };
         });
-         const filteredVoices = voices.filter((voice: any) =>  favorites?.favorite_voice_ids.includes(voice.id));
+        const filteredVoices = voices.filter((voice: any) =>
+          favorites?.favorite_voice_ids.includes(voice.id)
+        );
         this.filteredVocies = categorizeVoicesOnLocale(filteredVoices);
         this.setFilterLanguageDataCloning(data);
         this.setFilterLanguageData(voices);
       }
-    )
+    );
     this.voicesService.getVoices().subscribe((data) => {
       this.setFilterLanguageData(data);
 
@@ -133,19 +152,20 @@ export class Voices implements OnInit {
     });
   }
 
-
   showVoice = (voice: any) => {
     return (
-      voice?.['voicename']
+      (voice?.['voicename']
         ?.toLowerCase()
         .includes(this.searchText?.toLowerCase()) ||
-      this.searchText === '' ||
-      !this.searchText
+        this.searchText === '' ||
+        !this.searchText) &&
+      (this.gender() === 'Any' || voice?.['gender'].toLowerCase() === this.gender().toLowerCase())
     );
   };
 
   setFilterLanguageData = (voices: any) => {
     const value = categorizeVoicesOnLocale(voices);
+    this.setLanguagesAvailable(value);
     const ITEMS_RENDERED_AT_ONCE = 2;
     const INTERVAL_IN_MS = 10;
 
@@ -168,7 +188,7 @@ export class Voices implements OnInit {
     }, INTERVAL_IN_MS);
   };
 
-    setFilterLanguageDataCloning = (voices: any) => {
+  setFilterLanguageDataCloning = (voices: any) => {
     const value = categorizeVoicesOnLocale(voices);
     const ITEMS_RENDERED_AT_ONCE = 2;
     const INTERVAL_IN_MS = 10;
@@ -196,5 +216,17 @@ export class Voices implements OnInit {
     this.selectVoice.emit(voice);
     this.location.replaceState(`app/text-to-speech/${voice.voice_id}`);
     this.viewchildDialogRef()?.close({});
+  };
+
+  setLanguagesAvailable = (languages: any) => {
+    const languageArray: any[] = [];
+    languages.forEach((language: any) => {
+      languageArray.push({
+        name: language.language,
+        country: language.country,
+        code: language.locale,
+      });
+    });
+    this.languages = languageArray;
   };
 }
