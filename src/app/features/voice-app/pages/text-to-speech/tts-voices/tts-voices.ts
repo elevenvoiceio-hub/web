@@ -168,6 +168,9 @@ export class Voices implements OnInit, OnDestroy {
   };
 
   setFilterLanguageData = (voices: any) => {
+     voices.sort((a: IVoice, b: IVoice) => {
+      return a.id - b.id;
+    });
     const value = categorizeVoicesOnLocale(voices);
     this.setLanguagesAvailable(value);
     const ITEMS_RENDERED_AT_ONCE = 2;
@@ -193,6 +196,9 @@ export class Voices implements OnInit, OnDestroy {
   };
 
   setFilterLanguageDataCloning = (voices: any) => {
+    voices.sort((a: IVoice, b: IVoice) => {
+      return a.id - b.id;
+    });
     const value = categorizeVoicesOnLocale(voices);
     const ITEMS_RENDERED_AT_ONCE = 2;
     const INTERVAL_IN_MS = 10;
