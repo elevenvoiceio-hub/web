@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { AdminService } from '../../../../../services/admin-service/admin-service';
 import { CommonModule } from '@angular/common';
 import { IAdminStats } from '../../../../../core/interfaces/dashboard.interface';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { provideIcons } from '@ng-icons/core';
 import { lucideUsers } from '@ng-icons/lucide';
 import { remixAiGenerate2, remixUserVoiceFill, remixMoneyRupeeCircleFill, remixFeedbackLine } from '@ng-icons/remixicon';
-import { StatCard } from "../stat-card/stat-card";
+import { ModelUsageChartComponent } from "../model-usage-chart/model-usage-chart";
 
 @Component({
   selector: 'app-statistics',
-  imports: [CommonModule, NgIcon, StatCard],
+  imports: [CommonModule, ModelUsageChartComponent],
   templateUrl: './statistics.html',
   styleUrl: './statistics.css',
   viewProviders: [provideIcons({

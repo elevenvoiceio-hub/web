@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StatCard } from './stat-card';
+import { ModelUsageChart } from './model-usage-chart';
 
-describe('StatCard', () => {
-  let component: StatCard;
-  let fixture: ComponentFixture<StatCard>;
+describe('ModelUsageChart', () => {
+  let component: ModelUsageChart;
+  let fixture: ComponentFixture<ModelUsageChart>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StatCard]
+      imports: [ModelUsageChart]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(StatCard);
+    fixture = TestBed.createComponent(ModelUsageChart);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

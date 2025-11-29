@@ -9,9 +9,6 @@ import { Component, computed, effect, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-
-
-
 import { Pagination } from '../../../../../shared/components/pagination/pagination';
 import {
   lucidePlus,
@@ -34,12 +31,20 @@ import {
   GET_NAME,
 } from '../../../../../shared/utils/ai-models.utils';
 
-
-
-
 @Component({
   selector: 'app-voice-management-table',
-  imports: [Pagination, HlmButton, NgIcon, BrnSelectImports, HlmSelectImports, FormsModule, HlmInput, HlmTooltipImports, BrnTooltipContentTemplate, HlmSwitch],
+  imports: [
+    Pagination,
+    HlmButton,
+    NgIcon,
+    BrnSelectImports,
+    HlmSelectImports,
+    FormsModule,
+    HlmInput,
+    HlmTooltipImports,
+    BrnTooltipContentTemplate,
+    HlmSwitch,
+  ],
   templateUrl: './voice-management-table.html',
   styleUrl: './voice-management-table.css',
   providers: [
@@ -97,6 +102,7 @@ export class VoiceManagementTable {
     this.voiceService.getVoices().subscribe((voices: any) => {
       voices = voices.filter((voice: any) => this.aiImageDetails[voice.model]);
       this.voices = voices;
+      voices.sort((a: any, b: any) => a.id - b.id);
       this.languages = this.getLanguages(voices);
       this.updateTable(
         this.model(),

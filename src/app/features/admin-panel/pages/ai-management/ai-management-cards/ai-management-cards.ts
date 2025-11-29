@@ -1,7 +1,18 @@
 import { HlmBadge } from '@spartan-ng/helm/badge';
 import { HlmButton } from '@spartan-ng/helm/button';
-import { BrnDialog, BrnDialogContent, BrnDialogTrigger } from '@spartan-ng/brain/dialog';
-import { HlmDialog, HlmDialogContent, HlmDialogDescription, HlmDialogFooter, HlmDialogHeader, HlmDialogTitle } from '@spartan-ng/helm/dialog';
+import {
+  BrnDialog,
+  BrnDialogContent,
+  BrnDialogTrigger,
+} from '@spartan-ng/brain/dialog';
+import {
+  HlmDialog,
+  HlmDialogContent,
+  HlmDialogDescription,
+  HlmDialogFooter,
+  HlmDialogHeader,
+  HlmDialogTitle,
+} from '@spartan-ng/helm/dialog';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmSwitchImports } from '@spartan-ng/helm/switch';
 import { Component, model, viewChild, effect, output } from '@angular/core';
@@ -16,10 +27,7 @@ import {
 } from '@ng-icons/remixicon';
 import { gameFoxHead } from '@ng-icons/game-icons';
 
-
 import { IAiModel } from '../../../../../core/interfaces/ai-models.interface';
-
-
 
 import {
   FormControl,
@@ -36,7 +44,22 @@ import {
 
 @Component({
   selector: 'app-ai-management-cards',
-  imports: [NgIcon, HlmButton, HlmBadge, BrnDialogTrigger, BrnDialogContent, HlmDialog, HlmDialogContent, HlmDialogHeader, HlmDialogFooter, HlmDialogTitle, HlmDialogDescription, HlmInput, ReactiveFormsModule, HlmSwitchImports],
+  imports: [
+    NgIcon,
+    HlmButton,
+    HlmBadge,
+    BrnDialogTrigger,
+    BrnDialogContent,
+    HlmDialog,
+    HlmDialogContent,
+    HlmDialogHeader,
+    HlmDialogFooter,
+    HlmDialogTitle,
+    HlmDialogDescription,
+    HlmInput,
+    ReactiveFormsModule,
+    HlmSwitchImports,
+  ],
   templateUrl: './ai-management-cards.html',
   styleUrl: './ai-management-cards.css',
   providers: [
@@ -48,7 +71,7 @@ import {
       remixPauseLargeFill,
       lucidePencil,
       gameFoxHead,
-      remixRobot3Line
+      remixRobot3Line,
     }),
   ],
 })
