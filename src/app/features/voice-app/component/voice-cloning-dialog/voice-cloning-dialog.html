@@ -2,7 +2,7 @@
   <div hlmDialogOverlay class="fixed inset-0 z-50 bg-background/50"></div>
 
   <hlm-dialog-content
-    class="voice-cloning-dialog /* Mobile: Full Screen, No Rounding/Border */ min-h-[100dvh] w-full max-w-none p-0 overflow-y-auto /* Tablet/Desktop: Centered Dialog with Max Width */ md:min-h-[820px] md:w-[90vw] md:max-w-2xl md:p-8 md:rounded-lg md:border lg:w-[900px] /* Position Fix */ fixed top-0 left-0 right-0 bottom-0 md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2"
+    class="voice-cloning-dialog min-h-dvh w-full max-w-none p-0 overflow-y-auto  md:min-h-[820px] md:w-[90vw] md:max-w-2xl md:p-8 md:rounded-lg md:border lg:w-[900px] fixed top-0 left-0 right-0 bottom-0 md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2"
   >
     <div class="relative w-full">
       @if(currentScreen !== 'selection'){
@@ -10,12 +10,12 @@
         ng-icon-button
         variant="ghost"
         (click)="goBack()"
-        class="absolute left-4 top-4 z-50 text-foreground"
+        class="absolute left-4 top-6 z-50 text-foreground"
       >
         <ng-icon name="lucideChevronLeft" class="h-6 w-6" /></button
       >} @switch(currentScreen){ @case('selection'){
       <div
-        class="flex flex-col items-center space-y-4 /* Mobile: p-4, sm:p-6, pt-12 (to clear header elements) */ p-4 sm:p-6 pt-12 /* Desktop Fix: md:p-6 md:pt-6 ensures padding isn't removed */ md:p-6 md:pt-6 text-center"
+        class="flex flex-col items-center space-y-4 p-4 sm:p-6 pt-12 md:p-6 md:pt-6 text-center max-w-screen"
       >
         <h3
           brnDialogTitle
@@ -30,7 +30,7 @@
             hlmBtn
             variant="outline"
             (click)="selectCloningMethod('record')"
-            class="w-full justify-start flex flex-row gap-2 sm:gap-4 border-2 py-5 sm:py-8 group cursor-pointer relative !bg-muted-foreground/8 !rounded-lg hover:border-border"
+            class="w-full justify-start flex flex-row gap-2 sm:gap-4 border-2 py-8 sm:py-12 group cursor-pointer relative bg-muted-foreground/8! rounded-lg! hover:border-border"
           >
             <p
               class="absolute -right-2 sm:-right-3 -top-2 sm:-top-3 z-40 text-xs sm:text-sm text-foreground bg-muted-foreground/30 px-1.5 sm:px-2 py-1 sm:py-1.5 text-center rounded-lg"
@@ -43,14 +43,14 @@
               <ng-icon name="lucideMic" />
             </div>
             <div
-              class="column-2 items-start flex flex-1 flex-col text-left break-words"
+              class="column-2 items-start flex flex-1 flex-col text-left wrap-break-word"
             >
               <span
                 class="row-1 pb-1 sm:pb-2 text-sm md:text-base leading-snug font-semibold"
                 >Record your voice</span
               >
               <span
-                class="text-xs sm:text-sm text-muted-foreground row-2 leading-tight"
+                class="text-xs sm:text-sm text-muted-foreground row-2 leading-tight text-wrap"
               >
                 Takes 15 seconds. AI will capture your intonation perfectly.
               </span>
@@ -60,7 +60,7 @@
             hlmBtn
             variant="outline"
             (click)="selectCloningMethod('upload')"
-            class="w-full justify-start flex flex-row gap-2 sm:gap-4 border-2 py-5 sm:py-8 group !bg-muted-foreground/8 !rounded-lg hover:border-border"
+            class="w-full justify-start flex flex-row gap-2 sm:gap-4 border-2 py-8 sm:py-12 group bg-muted-foreground/8! rounded-lg! hover:border-border"
           >
             <div
               class="column-1 items-center flex justify-center h-10 w-10 sm:h-12 sm:w-12 group-hover:bg-muted-foreground/50 bg-background rounded-xl shrink-0"
@@ -68,7 +68,7 @@
               <ng-icon name="lucideCloudUpload" />
             </div>
             <div
-              class="column-2 items-start flex flex-1 flex-col text-left break-words"
+              class="column-2 items-start flex flex-1 flex-col text-left wrap-break-word"
             >
               <span
                 class="row-1 pb-1 sm:pb-2 text-sm md:text-base leading-snug font-semibold"
@@ -173,7 +173,7 @@
             [disabled]="electronicSignature.toLowerCase() !== 'read'"
             variant="outline"
             (click)="signAndProceed()"
-            class="flex-shrink-0 h-10 rounded-md bg-foreground/8 px-3 py-2 text-center disabled:cursor-not-allowed disabled:opacity-50"
+            class="shrink-0 h-10 rounded-md bg-foreground/8 px-3 py-2 text-center disabled:cursor-not-allowed disabled:opacity-50"
           >
             Sign & Record
           </button>
@@ -201,14 +201,9 @@
           @if(selectedFile){
           <div class="w-full flex flex-col items-center gap-4">
             <p class="text-sm text-muted-foreground">Listen to your sample</p>
-
-            <audio
-              *ngIf="audioURL"
-              [src]="audioURL"
-              controls
-              class="w-full"
-            ></audio>
-
+            @if(audioURL){
+            <audio [src]="audioURL" controls class="w-full"></audio>
+            }
             <button
               hlmBtn
               variant="outline"
@@ -259,14 +254,13 @@
           @if(selectedFile){
           <div class="w-full flex flex-col items-center gap-4">
             <p class="text-sm text-muted-foreground">Listen to your sample</p>
-
+            @if(audioURL){
             <audio
-              *ngIf="audioURL"
               [src]="audioURL"
               controls
               class="w-full"
             ></audio>
-
+            }
             <button
               hlmBtn
               variant="outline"
