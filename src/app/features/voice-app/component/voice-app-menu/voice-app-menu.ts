@@ -14,6 +14,7 @@ import {
 import { remixVoiceRecognitionLine } from '@ng-icons/remixicon';
 import { UserService } from '../../../../services/user/user-service';
 import { IUser } from '../../../../core/interfaces/user.interface';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-voice-app-menu',
@@ -33,6 +34,7 @@ import { IUser } from '../../../../core/interfaces/user.interface';
   ],
 })
 export class VoiceAppMenu {
+  welcomeWebsiteURL = environment.welcomeWebsite;
   tokens = 0;
   userData: IUser | null = null;
 

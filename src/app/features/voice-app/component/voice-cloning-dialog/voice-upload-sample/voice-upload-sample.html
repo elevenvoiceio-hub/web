@@ -1,0 +1,53 @@
+<div
+  class="flex flex-col items-center space-y-4 p-4 sm:p-6 text-center pt-12 md:p-0 md:pt-0"
+>
+  <h3 brnDialogTitle hlm class="py-2 sm:py-4 text-lg sm:text-xl md:text-2xl">
+    Upload Voice Sample
+  </h3>
+  <div
+    class="flex flex-col items-center justify-center gap-4 sm:gap-6 max-w-lg w-full"
+  >
+    <app-drag-drop-upload
+      (filesDropped)="filesDropped.emit($event)"
+      class="w-full"
+    ></app-drag-drop-upload>
+
+    @if(selectedFile()){
+    <div class="w-full flex flex-col items-center gap-4">
+      <p class="text-sm text-muted-foreground">Listen to your sample</p>
+      @if(audioURL()){
+      <audio [src]="audioURL()" controls class="w-full"></audio>}
+      <button
+        hlmBtn
+        variant="outline"
+        class="text-primary border-0"
+        (click)="removeSelected()"
+      >
+        <ng-icon name="lucideRotateCw"></ng-icon>
+        Change voice
+      </button>
+    </div>
+    }
+
+    <div
+      class="w-full flex items-center justify-between p-4 bg-muted/50 rounded-lg"
+    >
+      <div class="flex items-center gap-x-2">
+        <ng-icon name="lucideSparkles" class="text-blue-400"></ng-icon>
+        <span class="font-medium">Enhance audio with AI</span>
+      </div>
+      <hlm-switch
+        [(ngModel)]="enhanceWithAI"
+        (ngModelChange)="onEnhanceChange($event)"
+      />
+    </div>
+
+    <button
+      hlmButton
+      class="w-full bg-foreground text-background p-2 font-medium rounded-lg"
+      (click)="useSample.emit()"
+    >
+      Use sample
+    </button>
+  </div>
+</div>

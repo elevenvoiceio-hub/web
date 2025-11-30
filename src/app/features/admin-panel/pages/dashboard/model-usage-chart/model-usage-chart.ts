@@ -15,7 +15,7 @@ interface ModelData {
   styleUrls: ['./model-usage-chart.css'],
   imports: [HlmBadge],
 })
-export class ModelUsageChartComponent  {
+export class ModelUsageChart  {
   // Mock data as a class property
   mockModels: ModelData[] = [
     { name: 'openai', tokens: 0, color: 'bg-blue-500', isActive: false },

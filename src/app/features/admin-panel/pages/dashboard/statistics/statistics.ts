@@ -5,11 +5,11 @@ import { IAdminStats } from '../../../../../core/interfaces/dashboard.interface'
 import { provideIcons } from '@ng-icons/core';
 import { lucideUsers } from '@ng-icons/lucide';
 import { remixAiGenerate2, remixUserVoiceFill, remixMoneyRupeeCircleFill, remixFeedbackLine } from '@ng-icons/remixicon';
-import { ModelUsageChartComponent } from "../model-usage-chart/model-usage-chart";
+import { ModelUsageChart } from "../model-usage-chart/model-usage-chart";
 
 @Component({
   selector: 'app-statistics',
-  imports: [CommonModule, ModelUsageChartComponent],
+  imports: [CommonModule, ModelUsageChart],
   templateUrl: './statistics.html',
   styleUrl: './statistics.css',
   viewProviders: [provideIcons({

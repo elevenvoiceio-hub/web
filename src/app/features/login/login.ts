@@ -26,6 +26,7 @@ import { environment } from '../../../environments/environment';
 })
 export class Login {
   applicationName = environment.applicationName;
+  welcomeWebsiteURL = environment.welcomeWebsite;
   showPassword = false;
 
   loginForm = new FormGroup({

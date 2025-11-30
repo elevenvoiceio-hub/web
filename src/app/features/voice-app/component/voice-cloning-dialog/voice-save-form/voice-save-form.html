@@ -1,0 +1,74 @@
+<div
+  class="flex flex-col items-center space-y-4 p-4 sm:p-6 text-center pt-12 md:p-0 md:pt-0"
+>
+  <h3 brnDialogTitle hlm class="py-2 sm:py-4 text-lg sm:text-xl md:text-2xl">
+    Save Your Voice
+  </h3>
+  <div class="flex flex-col gap-y-4 sm:gap-y-6 max-w-lg w-full items-start">
+    <div class="flex flex-col gap-y-2 w-full">
+      <label hlmLabel class="text-start">Name your voice</label>
+      <input
+        hlmInput
+        [(ngModel)]="voiceData.name"
+        class="flex-1 w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
+      />
+    </div>
+
+    <div class="flex flex-col gap-y-2 w-full">
+      <label hlmLabel class="text-start">Language</label>
+      <brn-select
+        [(ngModel)]="voiceData().language"
+        placeholder="Select a locale"
+        class="w-full"
+      >
+        <hlm-select-trigger #selectTrigger class="w-full bg-foreground"
+          ><hlm-select-value
+        /></hlm-select-trigger>
+        <hlm-select-content class="w-full" #selectContent>
+          @for(lang of languages(); track lang.code){
+          <hlm-option [value]="lang.code"
+            >{{ lang.name }} ({{ lang.code }})</hlm-option
+          >}
+        </hlm-select-content>
+      </brn-select>
+    </div>
+
+    <div class="flex flex-col gap-y-2 w-full">
+      <label hlmLabel class="text-start pb-2">Voice gender</label>
+      <hlm-radio-group class="flex gap-x-4" [(ngModel)]="voiceData().gender">
+        <label hlm-radio-group-item class="flex items-center gap-x-2">
+          <input hlmRadioInput type="radio" value="male" name="gender" />
+          <span>Male</span>
+        </label>
+        <label hlm-radio-group-item class="flex items-center gap-x-2">
+          <input hlmRadioInput type="radio" value="female" name="gender" />
+          <span>Female</span>
+        </label>
+      </hlm-radio-group>
+    </div>
+
+    <div
+      class="w-full flex flex-col items-center gap-4 border-t border-border pt-6"
+    >
+      @if(audioURL()){
+      <p class="text-sm text-muted-foreground">Listen to your sample</p>
+      <audio [src]="audioURL()" controls class="w-full"></audio>}
+      <button
+        hlmBtn
+        variant="outline"
+        class="text-primary"
+        (click)="removeFile.emit()"
+      >
+        <ng-icon name="lucideRotateCw" class="mr-2"></ng-icon>
+        Change voice
+      </button>
+    </div>
+  </div>
+  <button
+    hlmButton
+    class="w-full sm:w-[90%] mt-2 sm:mx-10 bg-foreground text-background p-2 font-medium rounded-lg text-sm sm:text-base"
+    (click)="save.emit()"
+  >
+    Save Voice
+  </button>
+</div>

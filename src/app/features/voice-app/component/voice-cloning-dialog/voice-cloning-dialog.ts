@@ -1,8 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
-import { BrnDialogRef, BrnDialogService } from '@spartan-ng/brain/dialog';
+import { Component } from '@angular/core';
+import { BrnDialogRef } from '@spartan-ng/brain/dialog';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { CommonModule } from '@angular/common';
-// import { Plyr } from 'plyr';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
 
 import {
@@ -36,17 +35,16 @@ import {
   lucideRotateCw,
 } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
+import { VoiceMeathodSelection } from './voice-meathod-selection/voice-meathod-selection';
+import { VoiceUploadSample } from './voice-upload-sample/voice-upload-sample';
+import { VoiceRecordSample } from './voice-record-sample/voice-record-sample';
+import { VoiceSaveForm } from './voice-save-form/voice-save-form';
 import { HlmDialogImports, HlmDialogOverlay } from '@spartan-ng/helm/dialog';
 import { BrnDialogImports } from '@spartan-ng/brain/dialog';
-import { HlmLabel } from '@spartan-ng/helm/label';
 import { FormsModule } from '@angular/forms';
 import { LANGUAGES } from '../../constants/language.constant';
-import { HlmSwitch } from '@spartan-ng/helm/switch';
-import { HlmRadioGroupImports } from '@spartan-ng/helm/radio-group';
 import { BrnSelectImports } from '@spartan-ng/brain/select';
-import { DragDropUpload } from '../../../../shared/components/drag-drop-upload/drag-drop-upload';
 import { VoiceCloningService } from '../../../../services/voice-cloning/voice-cloning';
-import { AudioRecorder } from '../../../../shared/components/audio-recorder/audio-recorder';
 import { UserService } from '../../../../services/user/user-service';
 
 type Screen =
@@ -70,16 +68,15 @@ interface ConsentItem {
     HlmButton,
     HlmDialogImports,
     BrnDialogImports,
-    HlmLabel,
     FormsModule,
     CommonModule,
     HlmDialogOverlay,
-    HlmSwitch,
     HlmSelectImports,
-    HlmRadioGroupImports,
     BrnSelectImports,
-    DragDropUpload,
-    AudioRecorder,
+    VoiceMeathodSelection,
+    VoiceUploadSample,
+    VoiceRecordSample,
+    VoiceSaveForm,
   ],
   providers: [
     provideIcons({
@@ -117,7 +114,6 @@ interface ConsentItem {
   styleUrl: './voice-cloning-dialog.css',
 })
 export class VoiceCloningDialog {
-  @ViewChild(AudioRecorder) private audioRecorderComponent!: AudioRecorder;
 
   constructor(
     private _dialogRef: BrnDialogRef<VoiceCloningDialog>,
@@ -167,7 +163,7 @@ export class VoiceCloningDialog {
       recommended: true,
     },
     {
-      icon: 'lucideUpload',
+      icon: 'lucideCloudUpload',
       title: 'Upload a file',
       description: 'Select and upload an mp3 or wav file.',
       method: 'upload' as 'record' | 'upload',
@@ -274,6 +270,11 @@ export class VoiceCloningDialog {
     this.navigateTo('consent');
   }
 
+  // wrapper for child component event to allow typed method
+  onChildSelectMethod(method: 'record' | 'upload') {
+    this.selectCloningMethod(method);
+  }
+
   proceedToPrivacy() {
     this.navigateTo('privacy');
   }
@@ -359,18 +360,15 @@ export class VoiceCloningDialog {
     audio.src = objectUrl;
   }
 
-  onRecordedFile(file: Blob) {}
+  onRecordedFile(file: Blob | File) {
+    const f = file instanceof File ? file : new File([file], 'recorded-sample.wav', { type: 'audio/wav' });
+    this.selectedFile = f;
+    this.voiceData.file = f;
+    this.audioURL = URL.createObjectURL(f);
+    this.navigateTo('saveVoice');
+  }
 
   useSample() {
-    if (this.currentScreen === 'recordSample' && this.audioRecorderComponent) {
-      const audioBlob = this.audioRecorderComponent.getAudioBlob();
-      if (audioBlob) {
-        const file = new File([audioBlob], 'recorded-sample.wav', {
-          type: 'audio/wav',
-        });
-        this.selectedFile = file;
-      }
-    }
     if (this.selectedFile) {
       this.voiceData.file = this.selectedFile;
       this.navigateTo('saveVoice');

@@ -21,4 +21,5 @@ import { environment } from '../../../../environments/environment';
 })
 export class Footer {
   applicationName = environment.applicationName;
+  welcomeWebsiteURL = environment.welcomeWebsite;
 }

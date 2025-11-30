@@ -2,12 +2,11 @@ import { IVoice } from './../../../../../../core/interfaces/voices.interface';
 import { Component, input, output } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { remixPlayFill } from '@ng-icons/remixicon';
-import { HlmIcon } from "@spartan-ng/helm/icon";
 import { HlmButton } from "@spartan-ng/helm/button";
 
 @Component({
   selector: 'app-tts-voice-card',
-  imports: [HlmIcon, NgIcon, HlmButton],
+  imports: [ NgIcon, HlmButton],
   templateUrl: './tts-voice-card.html',
   styleUrl: './tts-voice-card.css',
   viewProviders: [provideIcons({remixPlayFill})],

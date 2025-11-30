@@ -25,6 +25,7 @@ import { environment } from '../../../environments/environment';
 })
 export class SignUp {
   applicationName = environment.applicationName;
+  welcomeWebsiteURL = environment.welcomeWebsite;
   showPassword = false;
   showRePassword = false;
 

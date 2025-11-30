@@ -35,6 +35,7 @@ import { environment } from '../../../environments/environment';
 })
 export class ResetPassword {
   applicationName = environment.applicationName;
+  welcomeWebsiteURL = environment.welcomeWebsite;
   showPassword = false;
   showRePassword = false;
 
