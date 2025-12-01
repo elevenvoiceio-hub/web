@@ -9,7 +9,7 @@
       <label hlmLabel class="text-start">Name your voice</label>
       <input
         hlmInput
-        [(ngModel)]="voiceData.name"
+        [(ngModel)]="voiceData().name"
         class="flex-1 w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
       />
     </div>
@@ -27,7 +27,7 @@
         <hlm-select-content class="w-full" #selectContent>
           @for(lang of languages(); track lang.code){
           <hlm-option [value]="lang.code"
-            >{{ lang.name }} ({{ lang.code }})</hlm-option
+            >{{ lang.name }} ({{ lang.country }})</hlm-option
           >}
         </hlm-select-content>
       </brn-select>
