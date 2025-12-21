@@ -11,7 +11,6 @@ import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { TTS_EMOTIONS } from '../../constants/emotions.constant';
 import { MODELS } from '../../constants/models.constant';
 import { Voices } from './tts-voices/tts-voices';
-import { IVoice } from '../../../../core/interfaces/voices.interface';
 import { TtsService } from '../../../../services/tts-service/tts-service';
 import { b64toBlob } from '../../../../shared/utils/base64-to-blob';
 import { ActivatedRoute } from '@angular/router';
@@ -29,6 +28,9 @@ import { CommonService } from '../../../../services/common-service/common-servic
 import { mapRange } from '../../../../shared/utils/map-range,utils';
 import { getFileNameFromUrl } from '../../../../shared/utils/file-name-extractor.utils';
 import saveAs from 'file-saver';
+import { VoiceCloningService } from '../../../../services/voice-cloning/voice-cloning';
+import { IClonedVoices } from '../../../../core/interfaces/cloned.interface';
+import { error } from 'console';
 
 @Component({
   selector: 'app-text-to-speech',
@@ -67,7 +69,7 @@ export class TextToSpeech implements OnInit {
   textNormalization = signal(false);
   emotion = signal('None');
   model = signal(MODELS[0]);
-  selectedVoice = signal<IVoice | null>(null);
+  selectedVoice = signal<any>(null);
 
   aiModels: any = null;
   plans: IPlan[] = [];
@@ -83,6 +85,7 @@ export class TextToSpeech implements OnInit {
     private ttsService: TtsService,
     private activatedRoutes: ActivatedRoute,
     private voicesService: VoicesService,
+    private voiceCloningService: VoiceCloningService,
     private subscriptionService: SubscriptionsService,
     private readonly userService: UserService,
     private readonly commonService: CommonService
@@ -90,13 +93,28 @@ export class TextToSpeech implements OnInit {
     this.activatedRoutes.params.subscribe((params) => {
       const voiceId = params['voiceId'];
       if (voiceId) {
-        this.voicesService.getVoiceById(voiceId).subscribe((voice) => {
-          this.selectedVoice.set(voice);
-        });
+        this.voicesService.getVoiceById(voiceId).subscribe(
+          (voice) => {
+            if (voice) {
+              this.selectedVoice.set(voice);
+            } else {
+              this.getClonnedVoiceById(voiceId);
+            }
+          },
+          () => {
+            this.getClonnedVoiceById(voiceId);
+          }
+        );
       }
     });
     this.userService.UserDetails.subscribe((data) => (this.user = data));
     this.getAllPlans();
+  }
+
+  getClonnedVoiceById(voiceId: string) {
+    this.voiceCloningService.getClonedVoiceById(voiceId).subscribe((voice) => {
+      this.selectedVoice.set(voice);
+    });
   }
 
   ngOnInit() {
@@ -178,6 +196,7 @@ export class TextToSpeech implements OnInit {
           textNormalization: this.textNormalization(),
           emotion: this.emotion(),
           voice_id: this.selectedVoice()?.voice_id,
+          token_multiplier: 2,
         };
         this.ttsService.generateSpeechElevenLabs(requestPayload).subscribe({
           next: (response) => {
@@ -214,6 +233,7 @@ export class TextToSpeech implements OnInit {
           voice_id: this.selectedVoice()?.voice_id,
           model_id: 'eleven_multilingual_v2',
           speed: mapRange(this.speedRate(), 0, 100, 0.7, 1.2),
+          token_multiplier: 2,
         };
         this.ttsService.generateSpeechGenAIPro(requestPayload).subscribe({
           next: (response) => {
@@ -257,14 +277,10 @@ export class TextToSpeech implements OnInit {
   getAudioFile(url: string) {
     this.ttsService.getaudiofile(url).subscribe({
       next: (res: Blob) => {
-        const myFile = new File([
-          res],
-          getFileNameFromUrl(url),
-          {
-            type: 'audio/mpeg',
-            lastModified: new Date().getTime(), // Or a specific timestamp
-          }
-        );
+        const myFile = new File([res], getFileNameFromUrl(url), {
+          type: 'audio/mpeg',
+          lastModified: new Date().getTime(), // Or a specific timestamp
+        });
         this.file.set(myFile);
         this.getUserSubscription();
       },

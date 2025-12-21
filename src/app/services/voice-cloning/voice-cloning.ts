@@ -23,4 +23,8 @@ export class VoiceCloningService {
   deleteClonedVoice(id: string) {
     return this.http.delete(`${this.baseUrl}${id}/`);
   }
+
+  getClonedVoiceById(id: string) {
+    return this.http.get<IClonedVoices>(`${this.baseUrl}${id}/`);
+  }
 }

@@ -39,8 +39,8 @@ export const categorizeVoicesOnLocale = (data: any[]) => {
   const locale: any = LOCALE;
   const categorized: any = {};
   for (const obj of data) {
-    const splitted = obj['language_code'].split('-');
-    const categoryKey = `${splitted[0].toLowerCase()}-${splitted[1].toUpperCase()}`;
+    const splitted: string[] = obj['language_code'].split('-');
+    const categoryKey = `${splitted[0].toLowerCase()}-${splitted[1]?.toUpperCase() ?? language_country[splitted[0].toLowerCase()]}`;
     if (categorized[categoryKey]) {
       categorized[categoryKey].voices.push(obj);
     } else {
@@ -52,4 +52,15 @@ export const categorizeVoicesOnLocale = (data: any[]) => {
     }
   }
   return Object.values(categorized);
+};
+
+const language_country: any = {
+  en: 'US',
+  hi: 'IN',
+  mr: 'IN',
+  pa: 'IN',
+  te: 'IN',
+  bn: 'IN',
+  ta: 'IN',
+  gu: 'IN',
 };
