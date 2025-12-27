@@ -5,15 +5,10 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class CommonService {
-  loader = new BehaviorSubject<boolean>(false);
 
   toaster = new BehaviorSubject<any>(null);
 
   constructor() {}
-
-  setLoader(value: boolean) {
-    this.loader.next(value);
-  }
 
   setToaster(message: any) {
     this.toaster.next(message);

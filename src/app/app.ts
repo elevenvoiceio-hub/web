@@ -13,12 +13,8 @@ import { toast } from 'ngx-sonner';
 })
 export class App {
   protected title = 'ai-awaaz';
-  loader = false;
 
   constructor(private commonService: CommonService) {
-    this.commonService.loader.subscribe((value) => {
-      this.loader = value;
-    });
     this.commonService.toaster.subscribe((message) => {
       if (message) {
         toast(message);
