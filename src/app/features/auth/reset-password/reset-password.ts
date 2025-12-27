@@ -24,6 +24,7 @@ import {
   HlmInputOtpSlot,
 } from '@spartan-ng/helm/input-otp';
 import { BrnInputOtp } from '@spartan-ng/brain/input-otp';
+import { HlmSpinner } from "@spartan-ng/helm/spinner";
 
 @Component({
   selector: 'app-reset-password',
@@ -39,7 +40,8 @@ import { BrnInputOtp } from '@spartan-ng/brain/input-otp';
     HlmInputOtp,
     HlmInputOtpGroup,
     HlmInputOtpSlot,
-  ],
+    HlmSpinner
+],
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.css',
   providers: [provideIcons({ lucideAudioLines, lucideEye, lucideEyeOff, lucideMail, lucideLock })],
@@ -49,6 +51,7 @@ export class ResetPassword {
   welcomeWebsiteURL = environment.welcomeWebsite;
   showPassword = signal<boolean>(false);
   showRePassword = signal<boolean>(false);
+  loading = signal<boolean>(false);
 
   resetPasswordForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -73,13 +76,16 @@ export class ResetPassword {
 
   onSubmit = () => {
     const requestBody = this.resetPasswordForm.getRawValue();
+    this.loading.set(true);
 
     this.forgotPasswordService.resetPassword(requestBody).subscribe({
       next: () => {
         this.commonService.setToaster('Password reset successfully');
+        this.loading.set(false);
         this.router.navigate(['login']);
       },
       error: (err: HttpErrorResponse) => {
+        this.loading.set(false);
         this.commonService.setToaster(err.error.error);
       },
     });
