@@ -67,9 +67,6 @@
       "@spartan-ng/helm/typography": [
         "./libs/ui/typography/src/index.ts"
       ],
-      "@spartan-ng/helm/utils": [
-        "./libs/ui/utils/src/index.ts"
-      ],
       "@spartan-ng/helm/sonner": [
         "./libs/ui/sonner/src/index.ts"
       ],
@@ -84,6 +81,12 @@
       ],
       "@spartan-ng/helm/input-otp": [
         "./libs/ui/input-otp/src/index.ts"
+      ],
+      "@spartan-ng/helm/label": [
+        "./libs/ui/label/src/index.ts"
+      ],
+      "@spartan-ng/helm/utils": [
+        "./libs/ui/utils/src/index.ts"
       ]
     }
   },
