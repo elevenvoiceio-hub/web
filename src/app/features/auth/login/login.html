@@ -1,6 +1,6 @@
 <div class="flex min-h-screen h-screen pt-6">
   <div
-    class="flex flex-col items-center gap-10 h-full mx-auto w-[90%] animate-fade md:w-6/12 lg:w-[30%] pt-2 pb-4"
+    class="flex flex-col items-center gap-10 h-full mx-auto w-[90%] animate-fade md:w-6/12 2xl:w-[30%] pt-2 pb-4"
   >
     <div class="flex flex-nowrap items-center gap-2">
       <div class="flex items-center gap-2">
@@ -17,6 +17,7 @@
             type="email"
             placeholder="Enter your email"
             formControlName="email"
+            (input)="errorMessage.set('')"
           />
           <div hlmInputGroupAddon>
             <ng-icon name="lucideMail" />
@@ -26,11 +27,11 @@
           <input
             hlmInputGroupInput
             placeholder="Enter Password"
-              aria-invalid="false"
-              [type]="showPassword ? 'text' : 'password'"
-              name="password"
-              class="w-full"
-              formControlName="password"
+            aria-invalid="false"
+            [type]="showPassword() ? 'text' : 'password'"
+            name="password"
+            formControlName="password"
+            (input)="errorMessage.set('')"
           />
           <div hlmInputGroupAddon>
             <ng-icon name="lucideLock" />
@@ -42,22 +43,33 @@
               variant="ghost"
               type="button"
               size="icon-xs"
-              (click)="showPassword = !showPassword"
+              (click)="showPassword.set(!showPassword())"
             >
-              @if(showPassword){
+              @if(showPassword()){
               <ng-icon name="lucideEyeOff" />
               } @else{
               <ng-icon name="lucideEye" />
               }
             </button>
           </div>
-
         </div>
+        @if(errorMessage()){
+        <div class="text-sm text-red-600 text-center">
+          {{ errorMessage() }}
+        </div>
+        }
         <div class="w-full flex justify-end">
           <a hlmBtn variant="link" routerLink="/forgot-password">Forgot Password?</a>
         </div>
+        @if(loading()){
+        <button hlmBtn class="w-full" disabled>
+          <hlm-spinner />
+          Loading...
+        </button>
+        }@else{
         <button hlmBtn type="submit" class="w-full" [disabled]="loginForm.invalid">Continue</button
-        ><a class="block w-full px-4 text-center" routerLink="/signup"
+        >}
+        <a class="block w-full px-4 text-center" routerLink="/signup"
           >Don't have an account? <span class="underline">Sign up here</span></a
         >
       </form>
