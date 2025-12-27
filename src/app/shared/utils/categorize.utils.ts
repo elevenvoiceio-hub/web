@@ -1,4 +1,5 @@
-import { LOCALE } from '../../features/voice-app/constants/locale.constant';
+import { LOCALE } from "../constants/locale.constant";
+
 
 /**
  * Categorizes an array of objects based on a specified property.
