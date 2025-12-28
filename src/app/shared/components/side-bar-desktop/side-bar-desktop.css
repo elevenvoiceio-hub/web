@@ -1,0 +1,4 @@
+[hlmSidebarWrapper] {
+  --sidebar-width: calc(var(--spacing) * 52) !important;
+  --header-height: calc(var(--spacing) * 12 + 1px);
+}
