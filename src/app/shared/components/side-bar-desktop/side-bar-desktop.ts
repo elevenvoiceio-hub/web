@@ -1,138 +1,47 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideAudioLines, lucideMenu } from '@ng-icons/lucide';
+import {
+  lucideAudioLines,
+  lucideBookCheck,
+  lucideMenu,
+  lucideMic,
+  lucideMicVocal,
+  lucideSquareStack,
+} from '@ng-icons/lucide';
 import { HlmAvatarImports } from '@spartan-ng/helm/avatar';
 import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
 import { HlmIcon } from '@spartan-ng/helm/icon';
 import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
+import { environment } from '../../../../environments/environment';
+import { remixFeedbackLine, remixVoiceRecognitionLine } from '@ng-icons/remixicon';
+import { RouterLink, RouterLinkActive, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-side-bar-desktop',
-  imports: [HlmSidebarImports,
+  imports: [
+    HlmSidebarImports,
     NgIcon,
     HlmIcon,
     HlmDropdownMenuImports,
-    HlmAvatarImports],
+    HlmAvatarImports,
+    RouterModule
+],
   templateUrl: './side-bar-desktop.html',
   styleUrl: './side-bar-desktop.css',
-  viewProviders: [provideIcons({lucideAudioLines, lucideMenu})]
+  viewProviders: [
+    provideIcons({
+      lucideAudioLines,
+      lucideMenu,
+      lucideMic,
+      lucideSquareStack,
+      lucideMicVocal,
+      lucideBookCheck,
+      remixFeedbackLine,
+      remixVoiceRecognitionLine,
+    }),
+  ],
 })
 export class SideBarDesktop {
-  protected readonly _items = {
-		user: {
-			name: 'spartan',
-			email: 'me@spartan.ng',
-			avatar: '/assets/avatar.png',
-		},
-		navMain: [
-			{
-				title: 'Dashboard',
-				url: '#',
-				icon: 'tablerDashboard',
-			},
-			{
-				title: 'Lifecycle',
-				url: '#',
-				icon: 'tablerListDetails',
-			},
-			{
-				title: 'Analytics',
-				url: '#',
-				icon: 'tablerChartBar',
-			},
-			{
-				title: 'Projects',
-				url: '#',
-				icon: 'tablerFolder',
-			},
-			{
-				title: 'Team',
-				url: '#',
-				icon: 'tablerUsers',
-			},
-		],
-		navClouds: [
-			{
-				title: 'Capture',
-				icon: 'tablerCamera',
-				isActive: true,
-				url: '#',
-				items: [
-					{
-						title: 'Active Proposals',
-						url: '#',
-					},
-					{
-						title: 'Archived',
-						url: '#',
-					},
-				],
-			},
-			{
-				title: 'Proposal',
-				icon: 'tablerFileDescription',
-				url: '#',
-				items: [
-					{
-						title: 'Active Proposals',
-						url: '#',
-					},
-					{
-						title: 'Archived',
-						url: '#',
-					},
-				],
-			},
-			{
-				title: 'Prompts',
-				icon: 'tablerFileAi',
-				url: '#',
-				items: [
-					{
-						title: 'Active Proposals',
-						url: '#',
-					},
-					{
-						title: 'Archived',
-						url: '#',
-					},
-				],
-			},
-		],
-		navSecondary: [
-			{
-				title: 'Settings',
-				url: '#',
-				icon: 'tablerSettings',
-			},
-			{
-				title: 'Get Help',
-				url: '#',
-				icon: 'tablerHelp',
-			},
-			{
-				title: 'Search',
-				url: '#',
-				icon: 'tablerSearch',
-			},
-		],
-		documents: [
-			{
-				name: 'Data Library',
-				url: '#',
-				icon: 'tablerDatabase',
-			},
-			{
-				name: 'Reports',
-				url: '#',
-				icon: 'tablerReport',
-			},
-			{
-				name: 'Word Assistant',
-				url: '#',
-				icon: 'tablerFileWord',
-			},
-		],
-	};
-
+  app = environment.applicationName;
+  @Input() items!: any;
 }

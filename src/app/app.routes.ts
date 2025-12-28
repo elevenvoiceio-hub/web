@@ -7,5 +7,7 @@ export const routes: Routes = [
     path: 'app',
     loadComponent: () =>
       import('./features/voice-app/voice-app').then((m) => m.VoiceApp),
+    loadChildren: () =>
+      import('./features/voice-app/voice-app.routes').then((m) => m.voiceAppRoutes),
   }
 ];
