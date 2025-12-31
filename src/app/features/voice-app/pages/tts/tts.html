@@ -1,7 +1,37 @@
 <div class="h-full flex flex-col">
-<app-page-header title="Text to Speech" />
-<div class="flex h-full flex-col lg:flex-row gap-4 min-w-0">
-  <div class="flex h-full shrink grow flex-col min-h-0 min-w-0"></div>
-  <app-tts-settings class="hidden xl:block lg:flex-none lg:basis-[24rem] min-w-0 max-w-full" />
-</div>
+  <app-page-header title="Text to Speech" />
+  <div class="flex h-full flex-col lg:flex-row gap-4 min-w-0">
+    <div class="flex h-full shrink grow flex-col min-h-0 min-w-0">
+      <form
+        class="flex h-full w-full shrink grow flex-col p-4 lg:max-h-200 lg:w-auto lg:p-6 min-w-0"
+      >
+        <div hlmInputGroup class="min-h-15 lg:max-h-128 size-full! ">
+          <textarea
+            hlmInputGroupTextarea
+            placeholder="Begin by typing your text or simply paste the content you wish to transform into natural-sounding speech."
+            rows="4"
+            [(ngModel)]="text"
+            name="text"
+            [maxlength]="textareaMaxLength()"
+            class="resize-none wrap-break-word"
+          ></textarea>
+          <div hlmInputGroupAddon align="block-end">
+            <button
+              hlmInputGroupButton
+              variant="secondary"
+              size="sm"
+              (click)="text().length ? clearText() : setDemoText()"
+            >
+              {{ text().length ? 'Clear text' : 'Demo Text' }}
+            </button>
+            <span hlmInputGroupText class="ml-auto">
+              {{ text().length }} / {{textareaMaxLength()}}</span
+            >
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <app-tts-settings class="hidden xl:block lg:flex-none lg:basis-[24rem] min-w-0 max-w-full" />
+  </div>
 </div>
