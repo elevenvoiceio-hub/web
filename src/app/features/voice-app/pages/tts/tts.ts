@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { PageHeader } from "../../../../shared/components/page-header/page-header";
+import { TtsSettings } from "./components/tts-settings/tts-settings";
 
 @Component({
   selector: 'app-tts',
-  imports: [PageHeader],
+  imports: [PageHeader, TtsSettings],
   templateUrl: './tts.html',
   styleUrl: './tts.css',
 })

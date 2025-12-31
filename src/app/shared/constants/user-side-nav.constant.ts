@@ -1,11 +1,6 @@
 import { environment } from "../../../environments/environment";
 
 export const USER_SIDE_NAV_CONSTANT = {
-		user: {
-			name: 'spartan',
-			email: 'me@spartan.ng',
-			avatar: '/assets/avatar.png',
-		},
 		navMain: [
 			{
 				title: 'Text to Speech',
@@ -26,7 +21,11 @@ export const USER_SIDE_NAV_CONSTANT = {
 				title: 'Voices',
 				url: '/app/voices',
 				icon: 'lucideMicVocal',
-			},
+			},{
+        title: 'Billing',
+        url: '/billing',
+        icon: 'lucideCreditCard',
+      }
 
 		],
 		navSecondary: [

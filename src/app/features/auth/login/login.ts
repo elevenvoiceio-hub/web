@@ -8,7 +8,9 @@ import {
   lucideEye,
   lucideEyeOff,
   lucideLock,
+  lucideLogOut,
   lucideMail,
+  lucideUser,
 } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmInput } from '@spartan-ng/helm/input';
@@ -17,6 +19,7 @@ import { LocalStorageService } from '../../../services/local-storage-service/loc
 import { environment } from '../../../../environments/environment';
 import { HlmInputGroupImports } from '@spartan-ng/helm/input-group';
 import { HlmSpinnerImports } from '@spartan-ng/helm/spinner';
+import { remixDashboardLine } from '@ng-icons/remixicon';
 
 @Component({
   imports: [
@@ -31,7 +34,16 @@ import { HlmSpinnerImports } from '@spartan-ng/helm/spinner';
   templateUrl: './login.html',
   styleUrl: './login.css',
   providers: [
-    provideIcons({ lucideAudioLines, lucideEye, lucideEyeOff, lucideMail, lucideLock }),
+    provideIcons({
+      lucideAudioLines,
+      lucideEye,
+      lucideEyeOff,
+      lucideMail,
+      lucideLock,
+      lucideLogOut,
+      lucideUser,
+      remixDashboardLine
+    }),
     LocalStorageService,
   ],
 })
@@ -41,6 +53,7 @@ export class Login {
   showPassword = signal<boolean>(false);
   loading = signal<boolean>(false);
   errorMessage = signal<string>('');
+  redirectUrl: string | null = null;
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -54,6 +67,7 @@ export class Login {
     private readonly commonService: CommonService
   ) {
     this.localStorageService.clearData();
+    this.redirectUrl = this.route.currentNavigation()?.finalUrl?.queryParams?.['redirectUrl'] || null;
   }
 
   onSubmit = () => {
@@ -68,6 +82,10 @@ export class Login {
         this.loginForm.disable();
         const userData = { ...data, email: this.loginForm.value.email! };
         this.localStorageService.saveData('user', JSON.stringify(userData));
+        if (this.redirectUrl) {
+          this.route.navigateByUrl(this.redirectUrl);
+          return;
+        }
         this.route.navigate(['/app']);
       },
       error: (e) => {

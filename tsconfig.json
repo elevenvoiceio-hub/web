@@ -93,6 +93,12 @@
       ],
       "@spartan-ng/helm/dropdown-menu": [
         "./libs/ui/dropdown-menu/src/index.ts"
+      ],
+      "@spartan-ng/helm/select": [
+        "./libs/ui/select/src/index.ts"
+      ],
+      "@spartan-ng/helm/badge": [
+        "./libs/ui/badge/src/index.ts"
       ]
     }
   },

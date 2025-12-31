@@ -9,5 +9,8 @@ export const routes: Routes = [
       import('./features/voice-app/voice-app').then((m) => m.VoiceApp),
     loadChildren: () =>
       import('./features/voice-app/voice-app.routes').then((m) => m.voiceAppRoutes),
+  },{
+    path: '**',
+    redirectTo: 'app'
   }
 ];

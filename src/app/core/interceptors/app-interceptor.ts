@@ -11,6 +11,7 @@ export const appInterceptor: HttpInterceptorFn = (req, next) => {
   const localStorageService = inject(LocalStorageService);
   const router = inject(Router);
   const user = localStorageService.getData('user');
+  const redirectUrl = router.url;
 
   if (user) {
     const userData = JSON.parse(user);
@@ -26,7 +27,7 @@ export const appInterceptor: HttpInterceptorFn = (req, next) => {
       catchError((err: HttpErrorResponse) => {
         if (err && err.status === 401) {
           localStorageService.clearData();
-          router.navigate(['/login']);
+          router.navigate(['/login'], { queryParams: { redirectUrl } });
         }
         throw err;
       })

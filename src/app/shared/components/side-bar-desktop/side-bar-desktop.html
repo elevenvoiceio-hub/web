@@ -1,6 +1,6 @@
-<div hlmSidebarWrapper>
+<div hlmSidebarWrapper class="min-h-screen">
   <hlm-sidebar>
-    <div hlmSidebarHeader class="border-b h-(--header-height) flex-row items-center">
+    <div hlmSidebarHeader class="border-b h-(--header-height)! flex-row items-center">
       <ul hlmSidebarMenu>
         <a hlmSidebarMenuButton class="p-1.5!">
           <ng-icon hlm name="lucideAudioLines" class="size-5!" />
@@ -14,10 +14,12 @@
           <ul hlmSidebarMenu>
             @for (item of items?.navMain; track item.title) {
             <li hlmSidebarMenuItem>
-              <a hlmSidebarMenuButton
-              [routerLink]="item.url"
-            [routerLinkActive]="['bg-accent', 'border-accent']"
-              class="py-5">
+              <a
+                hlmSidebarMenuButton
+                [routerLink]="item.url"
+                [routerLinkActive]="['bg-accent', 'border-accent']"
+                class="py-5"
+              >
                 <ng-icon hlm [name]="item.icon" size="sm" />
                 <span>{{ item.title }}</span>
               </a>
@@ -26,23 +28,39 @@
           </ul>
         </div>
       </div>
-      @if(items?.navSecondary?.length){
+      @if(showCredits){
       <div hlmSidebarGroup class="mt-auto">
+        <div hlmSidebarGroupContent>
+          <div class="rounded bg-muted px-4 py-3 text-xs">
+            <div class="flex flex-col gap-1 font-normal">
+              <div class="text-muted-foreground">Remaining Balance</div>
+              <div class="flex items-center">
+                @if(userData()?.role === 'admin' || userData()?.role === 'subadmin'){
+                <ng-icon name="lucideInfinity" class="mr-2"> </ng-icon>
+                } @else { {{ tokens() | number : '' : 'en-In' }} } Chars
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      } @if(items?.navSecondary?.length){
+      <div hlmSidebarGroup [class.mt-auto]="!showCredits" class="mt-3">
         <div hlmSidebarGroupContent>
           <ul hlmSidebarMenu>
             @for (item of items?.navSecondary; track item.title) {
             <li hlmSidebarMenuItem>
               <a hlmSidebarMenuButton [href]="item.url" target="_blank">
-                <ng-icon hlm [name]="item.icon" size="sm"/>
+                <ng-icon hlm [name]="item.icon" size="sm" />
                 <span>{{ item.title }}</span>
               </a>
             </li>
             }
           </ul>
         </div>
-      </div>}
+      </div>
+      }
     </div>
-    @if(items?.user){
+    @if(userData()){
     <div hlmSidebarFooter class="border-t">
       <ul hlmSidebarMenu>
         <li hlmSidebarMenuItem>
@@ -53,66 +71,93 @@
             [hlmDropdownMenuTrigger]="userMenu"
           >
             <hlm-avatar class="size-8 rounded-lg grayscale">
-              <img
-                [src]="items.user.avatar"
-                alt="spartan logo. Resembling a spartanic shield"
-                hlmAvatarImage
-              />
-              <span class="rounded-lg bg-[#FD005B] text-white" hlmAvatarFallback>SP</span>
+              <span class="rounded-lg" hlmAvatarFallback>{{
+                userData()?.username?.charAt(0)
+              }}</span>
             </hlm-avatar>
             <div class="grid flex-1 text-left text-sm leading-tight">
-              <span class="truncate font-medium">{{ items.user.name }}</span>
+              <span class="truncate font-medium">{{
+                userData()?.role === 'admin' || userData()?.role === 'subadmin'
+                  ? userData()?.username
+                  : myPlan()?.name ?? 'No Plan'
+              }}</span>
               <span class="text-muted-foreground truncate text-xs">
-                {{ items.user.email }}
+                {{ userData()?.email }}
               </span>
             </div>
-            <ng-icon hlm name="tablerDotsVertical" class="ml-auto size-4" />
+            <ng-icon hlm name="lucideEllipsisVertical" class="ml-auto size-4" />
           </a>
         </li>
       </ul>
+
+      <ng-template #theme>
+        <hlm-dropdown-menu-sub>
+          <button hlmDropdownMenuItem (click)="darkMode()">
+            <ng-icon hlm name="lucideMoon" size="sm" />
+            Dark
+          </button>
+
+          <button hlmDropdownMenuItem (click)="lightMode()">
+            <ng-icon hlm name="lucideSun" size="sm" />
+            Light
+          </button>
+        </hlm-dropdown-menu-sub>
+      </ng-template>
       <ng-template #userMenu>
         <hlm-dropdown-menu class="min-w-56 rounded-lg">
           <hlm-dropdown-menu-label class="p-0 font-normal">
             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <hlm-avatar class="size-8 rounded-lg">
-                <img
-                  [src]="items.user.avatar"
-                  alt="spartan logo. Resembling a spartanic shield"
-                  hlmAvatarImage
-                />
-                <span class="rounded-lg bg-[#FD005B] text-white" hlmAvatarFallback>SP</span>
+                <span class="rounded-lg" hlmAvatarFallback>{{
+                  userData()?.username?.charAt(0)
+                }}</span>
               </hlm-avatar>
               <div class="grid flex-1 text-left text-sm leading-tight">
-                <span class="truncate font-medium">{{ items.user.name }}</span>
+                <span class="truncate font-medium">{{ userData()?.username }}</span>
                 <span class="text-muted-foreground truncate text-xs">
-                  {{ items.user.email }}
+                  {{ userData()?.email }}
                 </span>
               </div>
             </div>
           </hlm-dropdown-menu-label>
           <hlm-dropdown-menu-separator />
           <hlm-dropdown-menu-group>
-            <button hlmDropdownMenuItem>
-              <ng-icon hlm name="tablerUserCircle" size="sm" />
-              <span>Account</span>
+            <button hlmDropdownMenuItem routerLink="/user-profile">
+              <ng-icon hlm name="lucideUser" size="sm" />
+              <span>Profile</span>
             </button>
-            <button hlmDropdownMenuItem>
-              <ng-icon hlm name="tablerCreditCard" size="sm" />
-              <span>Billing</span>
+            <button
+              hlmDropdownMenuItem
+              [hlmDropdownMenuTrigger]="theme"
+              className="w-full"
+              side="right"
+            >
+              <ng-icon hlm name="lucideSunMoon" size="sm" />
+              <span class="">Theme</span>
+              <ng-icon
+                hlm
+                name="lucideChevronRight"
+                size="sm"
+                class="ml-auto"
+                hlm-dropdown-menu-item-sub-indicator
+              />
             </button>
-            <button hlmDropdownMenuItem>
-              <ng-icon hlm name="tablerNotification" size="sm" />
-              <span>Notifications</span>
+            @if(userData()?.role === 'admin' || userData()?.role === 'subadmin'){
+            <button hlmDropdownMenuItem routerLink="/admin">
+              <ng-icon hlm name="remixDashboardLine" size="sm" />
+              <span>Admin Dashboard</span>
             </button>
+            }
           </hlm-dropdown-menu-group>
           <hlm-dropdown-menu-separator />
-          <button hlmDropdownMenuItem>
-            <ng-icon hlm name="tablerLogout" size="sm" />
+          <button hlmDropdownMenuItem (click)="logout()">
+            <ng-icon hlm name="lucideLogOut" size="sm" />
             <span>Logout</span>
           </button>
         </hlm-dropdown-menu>
       </ng-template>
-    </div>}
+    </div>
+    }
   </hlm-sidebar>
   <main hlmSidebarInset>
     <header
@@ -120,7 +165,7 @@
     >
       <div class="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
         <ng-icon hlm name="lucideAudioLines" class="size-5!" />
-        <span class="text-base font-semibold">Acme Inc.</span>
+        <span class="text-base font-semibold">{{ app }}</span>
         <div class="ml-auto flex items-center gap-2">
           <button hlmBtn size="sm" class="h-7">
             <button hlmSidebarTrigger><ng-icon hlm name="lucideMenu" size="sm" /></button>
