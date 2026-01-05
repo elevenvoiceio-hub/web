@@ -5,7 +5,7 @@
       <form
         class="flex h-full w-full shrink grow flex-col p-4 lg:max-h-200 lg:w-auto lg:p-6 min-w-0"
       >
-        <div hlmInputGroup class="min-h-15 lg:max-h-128 size-full! ">
+        <div hlmInputGroup class="min-h-15 lg:max-h-128 size-full!">
           <textarea
             hlmInputGroupTextarea
             placeholder="Begin by typing your text or simply paste the content you wish to transform into natural-sounding speech."
@@ -25,13 +25,89 @@
               {{ text().length ? 'Clear text' : 'Demo Text' }}
             </button>
             <span hlmInputGroupText class="ml-auto">
-              {{ text().length }} / {{textareaMaxLength()}}</span
+              {{ text().length }} / {{ textareaMaxLength() }}</span
             >
           </div>
+        </div>
+        @if(file()){
+        <app-audio-waveform class="mt-4" [file]="file()" />
+        }
+
+        <div
+          class="mt-2 flex w-full shrink-0 grow-0 flex-row flex-nowrap justify-between gap-2 lg:mt-6 items-center"
+        >
+          <div class="flex-1 min-w-0 overflow-hidden">
+            <div class="flex items-center lg:gap-2 h-10 lg:h-12">
+              <div class="w-full min-w-0 overflow-hidden">
+                <!-- <app-tts-voices
+                  class="w-full min-w-0 h-full"
+                  [(selectedVoice)]="selectedVoice"
+                  (selectVoice)="selectedVoice.set($event)"
+                /> -->
+              </div>
+            </div>
+          </div>
+
+          <div class="shrink-0 ml-1">
+            <hlm-sheet side="right">
+              <button
+                brnSheetTrigger
+                hlmBtn
+                variant="outline"
+                type="button"
+                class="shrink-0 min-w-0 h-10 lg:h-12 px-3 flex items-center justify-center lg:hidden"
+              >
+                <div class="flex items-center justify-center gap-2">
+                  <ng-icon hlm name="lucideSettings" />
+                  <span class="ml-1 text-sm whitespace-nowrap">Settings</span>
+                </div>
+              </button>
+              <hlm-sheet-content *brnSheetContent="let ctx" class="w-[20rem] max-w-full p-4">
+                <app-tts-settings
+                  [(emotion)]="emotion"
+                  [(model)]="model"
+                  [(textNormalization)]="textNormalization"
+                  [(pitch)]="pitch"
+                  [(speedRate)]="speedRate"
+                />
+              </hlm-sheet-content>
+            </hlm-sheet>
+          </div>
+
+          <div class="shrink-0 ml-1 hidden lg:block">
+            <button
+              type="submit"
+              [disabled]="text.length === 0"
+              hlmBtn
+              class="h-10 lg:h-12 px-4"
+              (click)="generateSpeech()"
+            >
+              Generate Speech
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-2 w-full lg:hidden">
+          <button
+            type="submit"
+            [disabled]="text.length === 0"
+            hlmBtn
+            class="w-full min-w-0 justify-center h-10 lg:h-12"
+            (click)="generateSpeech()"
+          >
+            Generate Speech
+          </button>
         </div>
       </form>
     </div>
 
-    <app-tts-settings class="hidden xl:block lg:flex-none lg:basis-[24rem] min-w-0 max-w-full" />
+    <app-tts-settings
+      class="hidden xl:block lg:flex-none lg:basis-[24rem] min-w-0 max-w-full"
+      [(emotion)]="emotion"
+      [(model)]="model"
+      [(textNormalization)]="textNormalization"
+      [(pitch)]="pitch"
+      [(speedRate)]="speedRate"
+    />
   </div>
 </div>
