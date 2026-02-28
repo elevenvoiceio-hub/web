@@ -18,4 +18,5 @@ export interface IPlan {
   discount: number;
   on_offer: boolean;
   plan_id: string;
+  is_cloaning_available: boolean;
 }
