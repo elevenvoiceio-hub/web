@@ -6,14 +6,9 @@
     <div class="flex flex-col gap-2">
       <label for="emotion" hlmLabel>
         Emotion
-        <hlm-tooltip>
-          <button class="p-0" hlmTooltipTrigger>
-            <ng-icon name="lucideInfo" hlmIcon size="xs" class="text-muted-foreground!" />
-          </button>
-          <span *brnTooltipContent class="flex items-center max-w-40 text-xs">
-            Uses an AI model to change the emotion of the voice.
-          </span>
-        </hlm-tooltip>
+        <button class="p-0" hlmTooltip="Uses an AI model to change the emotion of the voice.">
+          <ng-icon name="lucideInfo" hlmIcon size="xs" class="text-muted-foreground!" />
+        </button>
       </label>
       <hlm-select
         class="inline-block"
@@ -26,8 +21,9 @@
           <hlm-select-value />
         </hlm-select-trigger>
         <hlm-select-content class="max-h-92">
-          @for(emotion of emotions; track emotion){
-          <hlm-option [value]="emotion">{{ emotion }}</hlm-option> }
+          @for (emotion of emotions; track emotion) {
+            <hlm-option [value]="emotion">{{ emotion }}</hlm-option>
+          }
         </hlm-select-content>
       </hlm-select>
     </div>
@@ -37,15 +33,13 @@
       <div class="flex items-center justify-between">
         <label for="pitch" hlmLabel>
           Pitch
-          <hlm-tooltip>
-            <button class="p-0" hlmTooltipTrigger>
-              <ng-icon name="lucideInfo" class="text-muted-foreground!" hlmIcon size="xs" />
-            </button>
-            <span *brnTooltipContent class="flex items-center max-w-40 text-xs">
-              Uses deterministic audio post-processing to adjust the pitch at which the speech is
-              delivered.
-            </span>
-          </hlm-tooltip>
+          <button
+            class="p-0"
+            hlmTooltip="Uses deterministic audio post-processing to adjust the pitch at which the speech is
+              delivered."
+          >
+            <ng-icon name="lucideInfo" class="text-muted-foreground!" hlmIcon size="xs" />
+          </button>
         </label>
         <div hlmInputGroup class="w-20!">
           <input
@@ -56,7 +50,7 @@
             type="number"
             value="-50"
             name="pitch"
-            [value]="pitch() - 50"
+            [value]="pitch()[0] - 50"
             (change)="updatePitch($event)"
             id="pitch"
             class="appearance-none"
@@ -65,8 +59,8 @@
         </div>
       </div>
       <div class="flex items-center justify-between text-xs">
-        <button type="button" (click)="pitch.set(0)">Low</button
-        ><button type="button" (click)="pitch.set(100)">High</button>
+        <button type="button" (click)="pitch.set([0])">Low</button
+        ><button type="button" (click)="pitch.set([100])">High</button>
       </div>
       <hlm-slider [(value)]="pitch" />
     </div>
@@ -76,15 +70,14 @@
       <div class="flex items-center justify-between">
         <label for="speed" hlmLabel>
           Speed Rate
-          <hlm-tooltip>
-            <button class="p-0" hlmTooltipTrigger>
-              <ng-icon name="lucideInfo" class="text-muted-foreground!" hlmIcon size="xs" />
-            </button>
-            <span *brnTooltipContent class="flex items-center max-w-40 text-xs">
-              Uses deterministic audio post-processing to adjust the pitch at which the speech is
-              delivered.
-            </span>
-          </hlm-tooltip>
+
+          <button
+            class="p-0"
+            hlmTooltip="Uses deterministic audio post-processing to adjust the pitch at which the speech is
+              delivered."
+          >
+            <ng-icon name="lucideInfo" class="text-muted-foreground!" hlmIcon size="xs" />
+          </button>
         </label>
         <div hlmInputGroup class="w-20!">
           <input
@@ -95,7 +88,7 @@
             type="number"
             value="-50"
             name="speed"
-            [value]="speedRate() - 50"
+            [value]="speedRate()[0] - 50"
             (change)="updateSpeedRate($event)"
             id="speed"
             class="appearance-none"
@@ -104,8 +97,8 @@
         </div>
       </div>
       <div class="flex items-center justify-between text-xs">
-        <button type="button" (click)="speedRate.set(0)">Low</button
-        ><button type="button" (click)="speedRate.set(100)">High</button>
+        <button type="button" (click)="speedRate.set([0])">Low</button
+        ><button type="button" (click)="speedRate.set([100])">High</button>
       </div>
       <hlm-slider [(value)]="speedRate" />
     </div>
@@ -114,16 +107,17 @@
     <div class="flex w-full items-center justify-between gap-2">
       <label for="textNormalization" hlmLabel>
         Text Normalization
-        <hlm-tooltip>
-          <button class="p-0" hlmTooltipTrigger>
-            <ng-icon name="lucideInfo" class="text-muted-foreground!" size="xs" hlmIcon />
-          </button>
-          <span *brnTooltipContent class="flex items-center max-w-40 text-xs">
+
+        <button class="p-0" [hlmTooltip]="tooltip">
+          <ng-icon name="lucideInfo" class="text-muted-foreground!" size="xs" hlmIcon />
+        </button>
+        <ng-template #tooltip>
+          <span class="flex items-center max-w-40 text-xs">
             If enabled, it will transform numbers, dates, etc. into words. For example, “55” is
             normalized into “fifty five”. This can increase latency due to additional processing
             required for text normalization.
           </span>
-        </hlm-tooltip>
+        </ng-template>
       </label>
       <hlm-switch [(checked)]="textNormalization" id="textNormalization" />
     </div>
@@ -138,8 +132,8 @@
             <div class="w-full" *brnSelectValue="let value">
               <div class="flex items-center gap-2">
                 <div>{{ value.name }}</div>
-                @if(value.isRecommended){
-                <span hlmBadge variant="outline">Recommended</span>
+                @if (value.isRecommended) {
+                  <span hlmBadge variant="outline">Recommended</span>
                 }
               </div>
               <div class="flex w-full h-full">
@@ -149,19 +143,21 @@
               </div>
               <div class="mt-2">
                 <div class="flex flex-wrap items-center gap-1">
-                  @for(language of value.languages | slice:0:2; track language){
-                  <span hlmBadge variant="secondary">{{ language }}</span
-                  >} @if(value.languages.length > 2){
-
-                  <button class="p-1" hlmTooltipTrigger>
-                    <span hlmBadge variant="secondary">+more</span>
-                  </button>
-                  <span *brnTooltipContent class="flex flex-col gap-2">
-                    @for (language of ( value.languages | slice:2:value.languages.length + 1); track
-                    language) {
-                    <span> {{ language }} </span>
-                    }
-                  </span>
+                  @for (language of value.languages | slice: 0 : 2; track language) {
+                    <span hlmBadge variant="secondary">{{ language }}</span>
+                  }
+                  @if (value.languages.length > 2) {
+                    <button class="p-1" hlmTooltipTrigger>
+                      <span hlmBadge variant="secondary">+more</span>
+                    </button>
+                    <span class="flex flex-col gap-2">
+                      @for (
+                        language of value.languages | slice: 2 : value.languages.length + 1;
+                        track language
+                      ) {
+                        <span> {{ language }} </span>
+                      }
+                    </span>
                   }
                 </div>
               </div>
@@ -169,38 +165,40 @@
           </hlm-select-value>
         </hlm-select-trigger>
         <hlm-select-content class="max-h-80">
-          @for(model of models; track model){
-          <hlm-option [value]="model" class="mb-1 bg-accent/50 border-border/60 border"
-            ><div class="w-full model-option">
-              <div class="flex items-center gap-2">
-                <div>{{ model.name }}</div>
-                @if(model.isRecommended){
-                <span hlmBadge variant="outline">Recommended</span>
-                }
-              </div>
-              <p class="mt-1 text-xs font-normal text-muted-foreground">
-                {{ model.description }}
-              </p>
-              <div class="mt-2">
-                <div class="flex flex-wrap items-center gap-1">
-                  @for(language of ( model.languages | slice:0:2); track language){
-                  <span hlmBadge>{{ language }}</span
-                  >} @if(model.languages.length > 2){
-
-                  <button class="p-1" hlmTooltipTrigger>
-                    <span hlmBadge variant="secondary">+more</span>
-                  </button>
-                  <div *brnTooltipContent class="flex flex-col gap-2">
-                    @for (language of ( model.languages | slice:2:model.languages.length + 1); track
-                    language) {
-                    <span> {{ language }} </span>
-                    }
-                  </div>
+          @for (model of models; track model) {
+            <hlm-option [value]="model" class="mb-1 bg-accent/50 border-border/60 border"
+              ><div class="w-full model-option">
+                <div class="flex items-center gap-2">
+                  <div>{{ model.name }}</div>
+                  @if (model.isRecommended) {
+                    <span hlmBadge variant="outline">Recommended</span>
                   }
                 </div>
-              </div>
-            </div></hlm-option
-          >
+                <p class="mt-1 text-xs font-normal text-muted-foreground">
+                  {{ model.description }}
+                </p>
+                <div class="mt-2">
+                  <div class="flex flex-wrap items-center gap-1">
+                    @for (language of model.languages | slice: 0 : 2; track language) {
+                      <span hlmBadge>{{ language }}</span>
+                    }
+                    @if (model.languages.length > 2) {
+                      <button class="p-1" hlmTooltipTrigger>
+                        <span hlmBadge variant="secondary">+more</span>
+                      </button>
+                      <div class="flex flex-col gap-2">
+                        @for (
+                          language of model.languages | slice: 2 : model.languages.length + 1;
+                          track language
+                        ) {
+                          <span> {{ language }} </span>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div></hlm-option
+            >
           }
         </hlm-select-content>
       </hlm-select>

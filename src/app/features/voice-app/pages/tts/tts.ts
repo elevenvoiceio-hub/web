@@ -4,7 +4,6 @@ import { TtsSettings } from './components/tts-settings/tts-settings';
 import { HlmInputGroupImports } from '@spartan-ng/helm/input-group';
 import { FormsModule } from '@angular/forms';
 import { AudioWaveform } from '../../../../shared/components/audio-waveform/audio-waveform';
-import { BrnSheetImports } from '@spartan-ng/brain/sheet';
 import { HlmSheetImports } from '@spartan-ng/helm/sheet';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSettings } from '@ng-icons/lucide';
@@ -22,16 +21,14 @@ import { DEMO_TEXT } from '../../../../shared/constants/demo-text.constant';
     HlmInputGroupImports,
     FormsModule,
     AudioWaveform,
-    BrnSheetImports,
     HlmSheetImports,
     NgIcon,
-    HlmButton
+    HlmButton,
   ],
   templateUrl: './tts.html',
   styleUrl: './tts.css',
-  viewProviders: [provideIcons({ lucideSettings,  })],
+  viewProviders: [provideIcons({ lucideSettings })],
 })
-
 export class Tts {
   text = signal<string>('');
   textareaMaxLength = signal<number>(2000);
@@ -39,8 +36,8 @@ export class Tts {
   emotion = signal<string>('');
   model = signal<ITtsModel>(MODELS[0]);
   textNormalization = signal<boolean>(false);
-  pitch = signal<number>(50);
-  speedRate = signal<number>(50);
+  pitch = signal<number[]>([50]);
+  speedRate = signal<number[]>([50]);
 
   selectedVoice = signal<IVoice | null>(null);
 
