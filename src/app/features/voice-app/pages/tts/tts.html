@@ -51,7 +51,7 @@
           <div class="shrink-0 ml-1">
             <hlm-sheet side="right">
               <button
-                brnSheetTrigger
+                hlmSheetTrigger
                 hlmBtn
                 variant="outline"
                 type="button"
@@ -62,7 +62,7 @@
                   <span class="ml-1 text-sm whitespace-nowrap">Settings</span>
                 </div>
               </button>
-              <hlm-sheet-content *brnSheetContent="let ctx" class="w-[20rem] max-w-full p-4">
+              <hlm-sheet-content *hlmSheetPortal="let ctx" class="w-[20rem] max-w-full p-4">
                 <app-tts-settings
                   [(emotion)]="emotion"
                   [(model)]="model"

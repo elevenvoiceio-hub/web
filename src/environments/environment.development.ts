@@ -1,5 +1,5 @@
 export const environment = {
-  baseUrl: 'https://django-backend-741299369703.asia-south1.run.app/api',
+  baseUrl: 'http://127.0.0.1:8000/api',
   applicationName: 'Eleven Voices',
   welcomeWebsite: 'https://elevenvoice.io',
 };
