@@ -1,7 +1,5 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronDown } from '@ng-icons/lucide';
 import { BrnSelectImports } from '@spartan-ng/brain/select';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
@@ -33,7 +31,7 @@ export type Payment = {
 
 import { ActionDropdown } from './action-dropdown/action-dropdown';
 import { TableHeadSelection, TableRowSelection } from './selection-column';
-import { SortHeaderButton } from './sort-header-button/sort-header-button';
+import { SortHeaderButton } from '../../../../../shared/components/sort-header-button/sort-header-button';
 
 @Component({
   selector: 'app-users-table',
@@ -42,7 +40,6 @@ import { SortHeaderButton } from './sort-header-button/sort-header-button';
     FormsModule,
     HlmDropdownMenuImports,
     HlmButtonImports,
-    NgIcon,
     HlmIconImports,
     HlmInputImports,
     BrnSelectImports,
@@ -51,11 +48,10 @@ import { SortHeaderButton } from './sort-header-button/sort-header-button';
   ],
   templateUrl: './users-table.html',
   styleUrl: './users-table.css',
-  providers: [provideIcons({ lucideChevronDown })],
 })
 export class UsersTable {
   protected _filterChanged(event: Event) {
-    this._table.getColumn('email')?.setFilterValue((event.target as HTMLInputElement).value);
+    this._table.setGlobalFilter((event.target as HTMLInputElement).value);
   }
 
   protected readonly _columns: ColumnDef<Payment>[] = [
@@ -69,8 +65,7 @@ export class UsersTable {
     {
       accessorKey: 'status',
       id: 'status',
-      header: 'Status',
-      enableSorting: false,
+      header: () => flexRenderComponent(SortHeaderButton, { inputs: { header: '' } }),
       cell: (info) => `<span class="capitalize">${info.getValue<string>()}</span>`,
     },
     {
@@ -82,8 +77,7 @@ export class UsersTable {
     {
       accessorKey: 'amount',
       id: 'amount',
-      header: '<div class="text-right">Amount</div>',
-      enableSorting: false,
+      header: () => flexRenderComponent(SortHeaderButton, { inputs: { header: '' } }),
       cell: (info) => {
         const amount = parseFloat(info.getValue<string>());
         const formatted = new Intl.NumberFormat('en-US', {
@@ -91,7 +85,7 @@ export class UsersTable {
           currency: 'USD',
         }).format(amount);
 
-        return `<div class="text-right">${formatted}</div>`;
+        return `<div>${formatted}</div>`;
       },
     },
     {

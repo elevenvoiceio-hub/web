@@ -2,32 +2,11 @@
   <input
     hlmInput
     class="w-full md:w-80"
-    placeholder="Filter emails..."
+    placeholder="Filter ..."
     (input)="_filterChanged($event)"
   />
-
-  <button hlmBtn variant="outline" align="end" [hlmDropdownMenuTrigger]="menu">
-    Columns
-    <ng-icon hlm name="lucideChevronDown" class="ml-2" size="sm" />
-  </button>
-  <ng-template #menu>
-    <hlm-dropdown-menu class="w-32">
-      @for (column of _hidableColumns; track column.id) {
-        <button
-          hlmDropdownMenuCheckbox
-          class="capitalize"
-          [checked]="column.getIsVisible()"
-          (triggered)="column.toggleVisibility()"
-        >
-          <hlm-dropdown-menu-checkbox-indicator />
-          {{ column.columnDef.id }}
-        </button>
-      }
-    </hlm-dropdown-menu>
-  </ng-template>
 </div>
 <div class="overflow-hidden rounded-md border">
-  <!-- we defer the loading of the table, because tanstack manipulates the DOM with flexRender which can cause errors during SSR -->
   @defer {
     <div hlmTableContainer>
       <table hlmTable>
