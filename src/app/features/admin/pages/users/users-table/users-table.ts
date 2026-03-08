@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrnSelectImports } from '@spartan-ng/brain/select';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
@@ -32,6 +32,10 @@ export type Payment = {
 import { ActionDropdown } from './action-dropdown/action-dropdown';
 import { TableHeadSelection, TableRowSelection } from './selection-column';
 import { SortHeaderButton } from '../../../../../shared/components/sort-header-button/sort-header-button';
+import {
+  HlmNumberedPagination,
+  HlmNumberedPaginationQueryParams,
+} from '@spartan-ng/helm/pagination';
 
 @Component({
   selector: 'app-users-table',
@@ -45,6 +49,7 @@ import { SortHeaderButton } from '../../../../../shared/components/sort-header-b
     BrnSelectImports,
     HlmSelectImports,
     HlmTableImports,
+    HlmNumberedPagination,
   ],
   templateUrl: './users-table.html',
   styleUrl: './users-table.css',
@@ -52,6 +57,18 @@ import { SortHeaderButton } from '../../../../../shared/components/sort-header-b
 export class UsersTable {
   protected _filterChanged(event: Event) {
     this._table.setGlobalFilter((event.target as HTMLInputElement).value);
+  }
+  public readonly page = signal(1);
+  public readonly pageSize = signal(1);
+
+  constructor() {
+    effect(() => {
+      this._table.setPageIndex(this.page() - 1);
+    });
+
+    effect(() => {
+      this._table.setPageSize(this.pageSize());
+    });
   }
 
   protected readonly _columns: ColumnDef<Payment>[] = [
@@ -132,9 +149,6 @@ export class UsersTable {
       rowSelection: this._rowSelection(),
     },
   }));
-  protected readonly _hidableColumns = this._table
-    .getAllColumns()
-    .filter((column) => column.getCanHide());
 
   protected _filterChange(email: Event) {
     const target = email.target as HTMLInputElement;

@@ -23,10 +23,9 @@ import {
   lucideUsers,
   lucideMail,
 } from '@ng-icons/lucide';
-import { HlmAvatarImports } from '@spartan-ng/helm/avatar';
 import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
 import { HlmIcon } from '@spartan-ng/helm/icon';
-import { HlmSidebarImports, HlmSidebarInset, HlmSidebarTrigger } from '@spartan-ng/helm/sidebar';
+import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
 import { environment } from '../../../../environments/environment';
 import {
   remixAiGenerate2,
@@ -45,6 +44,7 @@ import { LocalStorageService } from '../../../services/local-storage-service/loc
 import { SubscriptionsService } from '../../../services/subscriptions-service/subscriptions-service';
 import { UserService } from '../../../services/user/user-service';
 import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmAvatarImports } from '@spartan-ng/helm/avatar';
 
 @Component({
   selector: 'app-side-bar-desktop',
@@ -56,9 +56,7 @@ import { HlmButton } from '@spartan-ng/helm/button';
     HlmAvatarImports,
     RouterModule,
     CommonModule,
-    HlmSidebarInset,
     HlmButton,
-    HlmSidebarTrigger,
   ],
   templateUrl: './side-bar-desktop.html',
   styleUrl: './side-bar-desktop.css',

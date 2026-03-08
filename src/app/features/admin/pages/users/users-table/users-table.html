@@ -57,29 +57,13 @@
 
 <div class="flex flex-col justify-between py-4 sm:flex-row sm:items-center">
   @if (_table.getRowCount() > 0) {
-    <div class="${hlmMuted}">
-      {{ _table.getSelectedRowModel().rows.length }} of {{ _table.getRowCount() }} row(s) selected
-    </div>
-    <div class="mt-2 flex space-x-2 sm:mt-0">
-      <button
-        size="sm"
-        variant="outline"
-        hlmBtn
-        [disabled]="!_table.getCanPreviousPage()"
-        (click)="_table.previousPage()"
-      >
-        Previous
-      </button>
-      <button
-        size="sm"
-        variant="outline"
-        hlmBtn
-        [disabled]="!_table.getCanNextPage()"
-        (click)="_table.nextPage()"
-      >
-        Next
-      </button>
-    </div>
+    <hlm-numbered-pagination
+      [(currentPage)]="page"
+      [(itemsPerPage)]="pageSize"
+      [totalItems]="_table.getRowCount()"
+      [pageSizes]="[1, 2, 3]"
+      class="w-full"
+    />
   } @else {
     <div class="flex h-full w-full items-center justify-center">
       <div class="text-muted-foreground text-sm">No Data</div>

@@ -86,3 +86,18 @@ export const ADMIN_SIDE_NAV_CONSTANT = {
     },
   ],
 };
+
+export const SUBADMIN_SIDE_NAV_CONSTANT = {
+  navMain: [
+    {
+      title: 'Users',
+      url: '/subadmin/users',
+      icon: 'lucideUsers',
+    },
+    {
+      title: 'Service Requests',
+      url: '/subadmin/service-requests',
+      icon: 'remixFeedbackLine',
+    },
+  ],
+};
